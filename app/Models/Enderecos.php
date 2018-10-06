@@ -8,6 +8,11 @@ class Enderecos extends Model
 {
     protected $table = 'enderecos';
     protected $primaryKey = 'idendereco';
-    protected $fillable = [ 'idpessoa', 'idbairro', 'idcidade', 'endereco', 'numero', 'complemento', 'cep'];
+    protected $fillable = ['idpessoa', 'idbairro', 'idcidade', 'endereco', 'numero', 'complemento', 'cep'];
     protected $guarded = ['idendereco'];
+
+    public function cidades()
+    {
+        return $this->hasMany(App\Models\Produtos::class);
+    }
 }
