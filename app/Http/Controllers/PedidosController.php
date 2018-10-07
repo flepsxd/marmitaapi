@@ -47,4 +47,20 @@ class PedidosController extends Controller
         return resposta([]);
     }
 
+    public function timeline(Request $request)
+    {
+
+        $pedidos = Pedidos::with('pessoas', 'pedidos_itens.produto');
+        $novaTimeline = [];
+        foreach (Pedidos::$timeline as $key => $value) {
+            $pedido = clone $pedidos;
+            $novaTimeline[] = [
+                'header' => $value,
+                'filtro' => $key,
+                'dados' => $pedido->where('etapa', '=', $key)->get()
+            ];
+        }
+        return resposta($novaTimeline);
+    }
+
 }

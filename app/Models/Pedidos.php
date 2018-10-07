@@ -10,6 +10,14 @@ class Pedidos extends Model
     protected $primaryKey = 'idpedido';
     protected $fillable = ['idagendamento', 'idpessoa', 'idendereco', 'datahora', 'etapa', 'valor', 'observacoes', 'status'];
     protected $guarded = ['idpedido'];
+    protected $appends = ['status_formatado'];
+    public static $timeline = [
+        'A' => 'A Fazer',
+        'I' => 'Na Cozinha',
+        'P' => 'Pronto',
+        'E' => 'Entregando',
+        'C' => 'Entregue'
+    ];
 
     public function pedidos_itens()
     {
@@ -19,5 +27,10 @@ class Pedidos extends Model
     public function pessoas()
     {
         return $this->hasOne(Pessoas::class, 'idpessoa');
+    }
+
+    public function getStatusFormatadoAttribute()
+    {
+        return self::$timeline[$this->etapa];
     }
 }

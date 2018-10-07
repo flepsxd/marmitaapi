@@ -72,6 +72,7 @@ $router->group(['prefix' => 'agendamentos'], function () use ($router) {
 
 $router->group(['prefix' => 'pedidos'], function () use ($router) {
     $router->get('/', 'PedidosController@index');
+    $router->get('/timeline', 'PedidosController@timeline');
     $router->get('/{id}', 'PedidosController@show');
     $router->post('/', 'PedidosController@create');
     $router->put('/{id}', 'PedidosController@update');
