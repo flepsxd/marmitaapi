@@ -13,6 +13,11 @@ class Pedidos extends Model
 
     public function pedidos_itens()
     {
-        return $this->hasMany(App\Models\Pedidos_itens::class);
+        return $this->hasMany(Pedidos_itens::class, 'idpedido_item');
+    }
+
+    public function pessoas()
+    {
+        return $this->hasOne(Pessoas::class, 'idpessoa');
     }
 }

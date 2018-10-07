@@ -7,35 +7,46 @@ use Illuminate\Http\Request;
 
 class ProdutosController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('jwt.auth');
     }
-        
-    public function index(Request $request){
-        return resposta(Produtos::all());
+
+    public function index(Request $request)
+    {
+        $ativo = $request->input('ativo');
+        if (is_null($ativo)) {
+            return resposta(Produtos::all());
+        } else {
+            return resposta(Produtos::where('status', '=', ($ativo == "true" ? 'A' : 'I'))->get());
+        }
     }
 
-    public function show(Request $request, $id){
+    public function show(Request $request, $id)
+    {
         return resposta(Produtos::find($id));
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $model = Produtos::find($id);
         $model->fill($request->all());
         $model->save();
-        return resposta($model);   
+        return resposta($model);
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $model = new Produtos;
         $model->fill($request->all());
         $model->save();
-        return resposta($model);    
+        return resposta($model);
     }
 
-    public function delete(Request $request, $id){
+    public function delete(Request $request, $id)
+    {
         $model = Produtos::find($id);
-        if ($model){
+        if ($model) {
             return resposta($model->delete());
         }
         return resposta([]);

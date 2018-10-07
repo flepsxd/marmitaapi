@@ -8,6 +8,11 @@ class Pessoas extends Model
 {
     protected $table = 'pessoas';
     protected $primaryKey = 'idpessoa';
-    protected $fillable = [ 'nome', 'telefone', 'email', 'status' ];
+    protected $fillable = ['nome', 'telefone', 'email', 'status'];
     protected $guarded = ['idpessoa'];
+
+    public function pedidos()
+    {
+        return $this->belongsToMany(Pedidos::class);
+    }
 }
