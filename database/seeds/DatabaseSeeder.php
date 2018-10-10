@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             CityTableSeeder::class,
             NeightbourhoodTableSeeder::class,
+            AddressTableSeeder::class,
             PersonTableSeeder::class,
             ProductsTableSeeder::class,
-            AddressTableSeeder::class,
+            EtapaTableSeeder::class,
             SchedulesTableSeeder::class,
             ItemsSchedulesTableSeeder::class,
             RequestsTableSeeder::class,
-            ItemsRequestsTableSeeder::class,
             ReleasesTableSeeder::class
         ]);
         Model::reguard();

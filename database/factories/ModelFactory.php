@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -42,7 +43,6 @@ $factory->define(App\Models\Cidades::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Models\Enderecos::class, function (Faker\Generator $faker) {
     return [
-        'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
         'idbairro' => App\Models\Bairros::pluck('idbairro')->random(),
         'idcidade' => App\Models\Cidades::pluck('idcidade')->random(),
         'endereco' => $faker->streetName,
@@ -65,24 +65,30 @@ $factory->define(App\Models\Lancamentos::class, function (Faker\Generator $faker
 
 $factory->define(App\Models\Pedidos_itens::class, function (Faker\Generator $faker) {
     return [
-        'idpedido' => App\Models\Pedidos::pluck('idpedido')->random(),
-        'idproduto' => App\Models\Produtos::pluck('idproduto')->random(),
         'vlrunitario' => $faker->randomFloat(2),
         'quantidade' => $faker->randomDigit,
         'vlrtotal' => $faker->randomFloat(2),
-        'desconto' => $faker->randomFloat(2)
+        'desconto' => $faker->randomFloat(2),
+        'idproduto' => App\Models\Produtos::pluck('idproduto')->random()
     ];
 });
 $factory->define(App\Models\Pedidos::class, function (Faker\Generator $faker) {
     return [
-        'idagendamento' => App\Models\Agendamentos::pluck('idagendamento')->random(),
         'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
-        'idendereco' => App\Models\Enderecos::pluck('idendereco')->random(),
-        'datahora' => $faker->dateTime,
-        'etapa' => $faker->randomElement(['A', 'C', 'P', 'E', 'C']),
+        'datahora' => Carbon::now(),
+        'previsao' => Carbon::now()->addMinutes(30),
         'valor' => $faker->randomFloat(2),
         'observacoes' => $faker->realText,
         'status' => $faker->randomElement(['T', 'A', 'C', 'S', 'E'])
+    ];
+});
+$factory->define(App\Models\Pedidos_ordem::class, function (Faker\Generator $faker) {
+    $idetapa = App\Models\Etapas::pluck('idetapa')->random();
+    $ordem = App\Models\Pedidos_ordem::where('idetapa', $idetapa)->orderBy('ordem', 'desc')->pluck('ordem')->first();
+    $ordem = !is_null($ordem) ? ($ordem + 1) : 0;
+    return [
+        'ordem' => $ordem,
+        'idetapa' => $idetapa
     ];
 });
 $factory->define(App\Models\Pessoas::class, function (Faker\Generator $faker) {
@@ -90,7 +96,8 @@ $factory->define(App\Models\Pessoas::class, function (Faker\Generator $faker) {
         'nome' => $faker->unique()->name,
         'telefone' => $faker->phoneNumber,
         'email' => $faker->unique()->email,
-        'status' => $faker->randomElement(['A', 'I'])
+        'status' => $faker->randomElement(['A', 'I']),
+        'idendereco' => App\Models\Enderecos::pluck('idendereco')->random()
     ];
 });
 $factory->define(App\Models\Produtos::class, function (Faker\Generator $faker) {

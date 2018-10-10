@@ -15,8 +15,8 @@ class CreatePedidositensTable extends Migration
     {
         Schema::create('pedidos_itens', function (Blueprint $table) {
             $table->increments('idpedido_item');
-            $table->unsignedInteger('idpedido')->nullable(true);
-            $table->unsignedInteger('idproduto')->nullable(true);
+            $table->unsignedInteger('idpedido')->nullable(false);
+            $table->unsignedInteger('idproduto')->nullable(false);
             $table->decimal('vlrunitario', 15, 2);
             $table->unsignedInteger('quantidade');
             $table->decimal('vlrtotal', 15, 2);

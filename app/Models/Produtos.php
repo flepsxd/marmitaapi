@@ -13,11 +13,11 @@ class Produtos extends Model
 
     public function pedidos_itens()
     {
-        return $this->belongsToMany(App\Models\Pedidos_itens::class);
+        return $this->belongsToMany(Pedidos_itens::class, 'idproduto', 'idproduto');
     }
 
     public function agendamentos_itens()
     {
-        return $this->belongsToMany(App\Models\Agendamentos_itens::class);
+        return $this->belongsToMany(Agendamentos_itens::class, 'idproduto', 'idproduto');
     }
 }

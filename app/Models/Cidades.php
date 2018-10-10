@@ -13,6 +13,6 @@ class Cidades extends Model
 
     public function enderecos()
     {
-        return $this->belongsTo(App\Models\Enderecos);
+        return $this->belongsToMany(Enderecos::class, 'idcidade', 'idcidade');
     }
 }

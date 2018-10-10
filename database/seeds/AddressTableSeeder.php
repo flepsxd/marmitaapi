@@ -11,7 +11,6 @@ class AddressTableSeeder extends Seeder
      */
     public function run()
     {
-        // create 10 users using the user factory
-        factory(App\Models\Enderecos::class, 10)->create();
+        factory(App\Models\Enderecos::class, 50)->create();
     }
 }

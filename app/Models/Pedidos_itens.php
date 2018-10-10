@@ -10,14 +10,15 @@ class Pedidos_itens extends Model
     protected $primaryKey = 'idpedido_item';
     protected $fillable = ['idpedido', 'idproduto', 'vlrunitario', 'quantidade', 'vlrtotal', 'desconto'];
     protected $guarded = ['idpedido_item'];
+    public $with = ['produto'];
 
     public function pedido()
     {
-        return $this->hasOne(Pedidos::class, 'idpedido');
+        return $this->belongsTo(Pedidos::class, 'idpedido', 'idpedido');
     }
 
     public function produto()
     {
-        return $this->hasOne(Produtos::class, 'idproduto', 'idproduto');
+        return $this->hasOne(Produtos::class, 'idproduto');
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pessoas;
+use App\Models\Etapas;
 use Illuminate\Http\Request;
 
-class PessoasController extends Controller
+class EtapasController extends Controller
 {
     public function __construct()
     {
@@ -14,34 +14,25 @@ class PessoasController extends Controller
 
     public function index(Request $request)
     {
-        $ativo = $request->input('ativo');
-        if (is_null($ativo)) {
-            return resposta(Pessoas::all());
-        } else {
-            return resposta(Pessoas::where('status', '=', ($ativo == "true" ? 'A' : 'I'))->get());
-        }
+        return resposta(Etapas::all());
     }
 
     public function show(Request $request, $id)
     {
-        return resposta(Pessoas::find($id));
+        return resposta(Etapas::find($id));
     }
 
     public function update(Request $request, $id)
     {
-        $model = Pessoas::find($id);
-        $dados = $request->all();
-        $model->fill($dados);
-        if ($request->endereco) {
-            $model->endereco()->cadastro($request->endereco);
-        }
+        $model = Etapas::find($id);
+        $model->fill($request->all());
         $model->save();
         return resposta($model);
     }
 
     public function create(Request $request)
     {
-        $model = new Pessoas;
+        $model = new Etapas;
         $model->fill($request->all());
         $model->save();
         return resposta($model);
@@ -49,7 +40,7 @@ class PessoasController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $model = Pessoas::find($id);
+        $model = Etapas::find($id);
         if ($model) {
             return resposta($model->delete());
         }

@@ -15,7 +15,6 @@ class CreateEnderecosTable extends Migration
     {
         Schema::create('enderecos', function (Blueprint $table) {
             $table->increments('idendereco');
-            $table->unsignedInteger('idpessoa')->nullable(false);
             $table->unsignedInteger('idbairro')->nullable(false);
             $table->unsignedInteger('idcidade')->nullable(false);
             $table->string('endereco', 150)->nullable(false);
@@ -24,7 +23,6 @@ class CreateEnderecosTable extends Migration
             $table->string('cep', 9);
             $table->timestamps();
 
-            $table->foreign('idpessoa')->references('idpessoa')->on('pessoas');
             $table->foreign('idbairro')->references('idbairro')->on('bairros');
             $table->foreign('idcidade')->references('idcidade')->on('cidades');
         });
