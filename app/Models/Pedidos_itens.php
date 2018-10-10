@@ -19,6 +19,6 @@ class Pedidos_itens extends Model
 
     public function produto()
     {
-        return $this->hasOne(Produtos::class, 'idproduto');
+        return $this->hasOne(Produtos::class, 'idproduto', 'idproduto');
     }
 }

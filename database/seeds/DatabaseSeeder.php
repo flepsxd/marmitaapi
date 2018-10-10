@@ -15,13 +15,8 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
         // Register the user seeder
         $this->call([
-            UsersTableSeeder::class,
-            CityTableSeeder::class,
-            NeightbourhoodTableSeeder::class,
-            AddressTableSeeder::class,
-            PersonTableSeeder::class,
+            BaseSeeder::class,
             ProductsTableSeeder::class,
-            EtapaTableSeeder::class,
             SchedulesTableSeeder::class,
             ItemsSchedulesTableSeeder::class,
             RequestsTableSeeder::class,

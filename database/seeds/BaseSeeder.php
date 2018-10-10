@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
 class BaseSeeder extends Seeder
 {
@@ -15,6 +16,10 @@ class BaseSeeder extends Seeder
         // Register the user seeder
         $this->call([
             UsersTableSeeder::class,
+            CityTableSeeder::class,
+            NeightbourhoodTableSeeder::class,
+            AddressTableSeeder::class,
+            PersonTableSeeder::class,
             EtapaTableSeeder::class
         ]);
         Model::reguard();
