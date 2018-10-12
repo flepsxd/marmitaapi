@@ -17,10 +17,10 @@ class CreatePedidositensTable extends Migration
             $table->increments('idpedido_item');
             $table->unsignedInteger('idpedido')->nullable(false);
             $table->unsignedInteger('idproduto')->nullable(false);
-            $table->decimal('vlrunitario', 15, 2)->default(0);
-            $table->unsignedInteger('quantidade')->default(1);
-            $table->decimal('vlrtotal', 15, 2)->default(0);
-            $table->decimal('desconto', 15, 2)->default(0);
+            $table->decimal('vlrunitario', 15, 2)->default(0)->nullable(true);
+            $table->unsignedInteger('quantidade')->default(1)->nullable(true);
+            $table->decimal('vlrtotal', 15, 2)->default(0)->nullable(true);
+            $table->decimal('desconto', 15, 2)->default(0)->nullable(true);
             $table->timestamps();
 
             $table->foreign('idpedido')->references('idpedido')->on('pedidos');

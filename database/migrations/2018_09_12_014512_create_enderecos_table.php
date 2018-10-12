@@ -18,9 +18,9 @@ class CreateEnderecosTable extends Migration
             $table->unsignedInteger('idbairro')->nullable(false);
             $table->unsignedInteger('idcidade')->nullable(false);
             $table->string('endereco', 150)->nullable(false);
-            $table->unsignedInteger('numero');
-            $table->string('complemento', 200);
-            $table->string('cep', 9);
+            $table->unsignedInteger('numero')->nullable(false);
+            $table->string('complemento', 200)->nullable(false);
+            $table->string('cep', 9)->nullable(false);
             $table->timestamps();
 
             $table->foreign('idbairro')->references('idbairro')->on('bairros');
