@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pessoas;
+use App\Models\Enderecos;
 use Illuminate\Http\Request;
 
 class PessoasController extends Controller
@@ -33,18 +34,22 @@ class PessoasController extends Controller
         $dados = $request->all();
         $model->fill($dados);
         if ($request->endereco) {
-            $model->endereco()->cadastro($request->endereco);
+            $endereco = Enderecos::cadastro($dados['endereco']);
+            $model->endereco()->update($endereco);
         }
         $model->save();
-        return resposta($model);
+        return resposta(Pessoas::find($id));
     }
 
     public function create(Request $request)
     {
-        $model = new Pessoas;
-        $model->fill($request->all());
-        $model->save();
-        return resposta($model);
+        $dados = $request->all();
+
+        $pessoa = new Pessoas($dados);
+        $endereco = Enderecos::cadastro($dados['endereco']);
+        $pessoa->endereco()->create($endereco);
+        $pessoa->save();
+        return resposta(Pessoas::find($pessoa->idpessoa));
     }
 
     public function delete(Request $request, $id)
