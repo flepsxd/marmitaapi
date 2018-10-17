@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Pedidos_itens extends Model
+class Pedidos_itens extends Geral
 {
     protected $table = 'pedidos_itens';
     protected $primaryKey = 'idpedido_item';

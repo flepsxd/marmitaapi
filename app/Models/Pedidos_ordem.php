@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Pedidos_ordem extends Model
+class Pedidos_ordem extends Geral
 {
     protected $table = 'pedidos_ordem';
     protected $primaryKey = 'idpedido_ordem';

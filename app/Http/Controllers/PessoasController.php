@@ -15,12 +15,8 @@ class PessoasController extends Controller
 
     public function index(Request $request)
     {
-        $ativo = $request->input('ativo');
-        if (is_null($ativo)) {
-            return resposta(Pessoas::all());
-        } else {
-            return resposta(Pessoas::where('status', '=', ($ativo == "true" ? 'A' : 'I'))->get());
-        }
+        $pessoas = Pessoas::filtrar($request);
+        return resposta($pessoas->get());
     }
 
     public function show(Request $request, $id)
@@ -49,7 +45,7 @@ class PessoasController extends Controller
         $endereco = Enderecos::cadastro($dados['endereco']);
         $pessoa->endereco()->create($endereco);
         $pessoa->save();
-        return resposta(Pessoas::find($pessoa->idpessoa));
+        return resposta(Pessoas::findOrFail($pessoa->idpessoa));
     }
 
     public function delete(Request $request, $id)

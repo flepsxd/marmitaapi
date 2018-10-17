@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Enderecos extends Model
+class Enderecos extends Geral
 {
     protected $table = 'enderecos';
     protected $primaryKey = 'idendereco';

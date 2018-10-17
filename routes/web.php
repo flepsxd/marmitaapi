@@ -104,3 +104,11 @@ $router->group(['prefix' => 'lancamentos'], function () use ($router) {
     $router->delete('/{id}', 'LancamentosController@delete');
 });
 
+$router->group(['prefix' => 'etapas'], function () use ($router) {
+    $router->get('/', 'EtapasController@index');
+    $router->get('/{id}', 'EtapasController@show');
+    $router->post('/', 'EtapasController@create');
+    $router->put('/{id}', 'EtapasController@update');
+    $router->delete('/{id}', 'EtapasController@delete');
+});
+

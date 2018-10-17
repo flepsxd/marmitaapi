@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
-class Pedidos extends Model
+class Pedidos extends Geral
 {
     protected $table = 'pedidos';
     protected $primaryKey = 'idpedido';
-    protected $fillable = ['idagendamento', 'idendereco', 'idpessoa', 'datahora', 'valor', 'observacoes', 'status'];
+    protected $fillable = ['idagendamento', 'idendereco', 'idpessoa', 'datahora', 'previsao', 'valor', 'observacoes', 'status'];
     protected $guarded = ['idpedido'];
-    protected $appends = ['etapa', 'ordem', 'status_formatado'];
+    protected $appends = ['etapa', 'ordem', 'status_formatado', 'pessoa_nome'];
+    protected $dates = ['datahora', 'previsao'];
     public $with = ['pessoas.endereco', 'pedidos_itens', 'pedidos_ordem.etapa'];
 
     public function pedidos_itens()
@@ -46,6 +47,19 @@ class Pedidos extends Model
     public function getOrdemAttribute()
     {
         return $this->pedidos_ordem->ordem;
+    }
+
+    public function getPessoaNomeAttribute() {
+        return $this->pessoas->nome;
+    }
+
+    public function setDatahoraAttribute($value) {
+        return $this->attributes['datahora'] = Carbon::parse($value);
+    }
+
+    public function setPrevisaoAttribute($value) {
+        return $this->attributes['previsao'] = Carbon::parse($value);
+
     }
 
 }

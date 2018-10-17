@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Etapas extends Model
+class Etapas extends Geral
 {
     protected $table = 'etapas';
     protected $primaryKey = 'idetapa';

@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Agendamentos extends Model
+class Agendamentos extends Geral
 {
     protected $table = 'agendamentos';
     protected $primaryKey = 'idagendamento';

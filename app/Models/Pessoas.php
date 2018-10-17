@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Pessoas extends Model
+class Pessoas extends Geral
 {
     protected $table = 'pessoas';
     protected $primaryKey = 'idpessoa';
     protected $fillable = ['nome', 'telefone', 'email', 'status', 'idendereco'];
     protected $guarded = ['idpessoa'];
+    protected $appends = ['status_formatado'];
     public $with = ['endereco'];
 
     public function pedidos()
@@ -20,5 +19,9 @@ class Pessoas extends Model
     public function endereco()
     {
         return $this->hasOne(Enderecos::class, 'idendereco', 'idendereco');
+    }
+
+    public function getStatusFormatadoAttribute() {
+        return $this->status == 'A' ? 'Ativo' : 'Inativo';
     }
 }

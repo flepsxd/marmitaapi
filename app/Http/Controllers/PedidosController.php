@@ -18,7 +18,7 @@ class PedidosController extends Controller
 
     public function index(Request $request)
     {
-        return resposta(Pedidos::get());
+        return resposta(Pedidos::filtrar($request)->get());
     }
 
     public function show(Request $request, $id)
@@ -85,9 +85,11 @@ class PedidosController extends Controller
     public function timeline(Request $request)
     {
         $novaTimeline = [];
+        $model = Pedidos::filtrar($request);
         $etapas = Etapas::all();
         foreach ($etapas as $etapa) {
-            $pedidos = Pedidos::whereHas('pedidos_ordem', function ($query) use ($etapa) {
+            $pedidos = clone $model;
+            $pedidos =  $pedidos->whereHas('pedidos_ordem', function ($query) use ($etapa) {
                 $query->where('idetapa', $etapa->idetapa);
             });
             $pedidos = $pedidos->get()->sortBy(function ($val) {

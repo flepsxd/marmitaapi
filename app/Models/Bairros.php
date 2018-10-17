@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Bairros extends Model
+class Bairros extends Geral
 {
     protected $table = 'bairros';
     protected $primaryKey = 'idbairro';
