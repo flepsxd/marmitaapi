@@ -85,14 +85,11 @@ class PedidosController extends Controller
     public function timeline(Request $request)
     {
         $novaTimeline = [];
-        $model = Pedidos::filtrar($request);
+        $model = Pedidos::filtrar($request)->get()->groupBy('pedidos_ordem.idetapa');
         $etapas = Etapas::all();
         foreach ($etapas as $etapa) {
-            $pedidos = clone $model;
-            $pedidos =  $pedidos->whereHas('pedidos_ordem', function ($query) use ($etapa) {
-                $query->where('idetapa', $etapa->idetapa);
-            });
-            $pedidos = $pedidos->get()->sortBy(function ($val) {
+            $pedidos = clone $model[$etapa->idetapa];
+            $pedidos = $pedidos->sortBy(function ($val) {
                 return $val->ordem;
             });
 
