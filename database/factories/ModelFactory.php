@@ -75,8 +75,8 @@ $factory->define(App\Models\Pedidos_itens::class, function (Faker\Generator $fak
 $factory->define(App\Models\Pedidos::class, function (Faker\Generator $faker) {
     return [
         'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
-        'datahora' => Carbon::now(),
-        'previsao' => Carbon::now()->addMinutes(30),
+        'datahora' => Carbon::now(-3),
+        'previsao' => Carbon::now(-3)->addMinutes(30),
         'valor' => $faker->randomFloat(2),
         'observacoes' => $faker->realText,
         'status' => $faker->randomElement(['T', 'A', 'C', 'S', 'E'])

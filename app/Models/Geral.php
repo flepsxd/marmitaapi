@@ -18,10 +18,10 @@ class Geral extends Model
                 if($dotIndex != false) {
                     $newKey = explode(".", $key);
                     $query = $query->whereHas($newKey[0], function($newQuery) use ($newKey, $dates, $value) {
-                        $newQuery = $this->where($newQuery, $newKey[1], $dates, $value);
+                        $newQuery = $this->whereFiltrar($newQuery, $newKey[1], $dates, $value);
                     });
                 } else {
-                    $query = $this->where($query, $key, $dates, $value);
+                    $query = $this->whereFiltrar($query, $key, $dates, $value);
                 }
                 
             }
@@ -41,7 +41,7 @@ class Geral extends Model
         
         return $query;
     }
-    function where(&$query, $key, $dates, $value) {
+    private function whereFiltrar(&$query, $key, $dates, $value) {
         if(in_array($key, $dates)) {
             $query = $query->whereDate($key, Carbon::parse($value)->toDateString());
         } else if(is_string($value) || is_numeric($value)) {
