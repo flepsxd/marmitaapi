@@ -12,14 +12,14 @@ class Pedidos extends Geral
     protected $guarded = ['idpedido'];
     protected $appends = ['etapa', 'ordem', 'status_formatado', 'pessoa_nome'];
     protected $dates = ['datahora', 'previsao'];
-    public $with = ['pessoas.endereco', 'pedidos_itens', 'pedidos_ordem.etapa', 'lancamento'];
+    public $with = ['pessoa.endereco', 'pedidos_itens', 'pedidos_ordem.etapa', 'lancamento'];
 
     public function pedidos_itens()
     {
         return $this->hasMany(Pedidos_itens::class, 'idpedido', 'idpedido');
     }
 
-    public function pessoas()
+    public function pessoa()
     {
         return $this->hasOne(Pessoas::class, 'idpessoa', 'idpessoa');
     }
@@ -54,7 +54,7 @@ class Pedidos extends Geral
     }
 
     public function getPessoaNomeAttribute() {
-        return $this->pessoas->nome;
+        return $this->pessoa->nome;
     }
 
     public function setDatahoraAttribute($value) {
