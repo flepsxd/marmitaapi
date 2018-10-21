@@ -54,8 +54,6 @@ $factory->define(App\Models\Enderecos::class, function (Faker\Generator $faker) 
 
 $factory->define(App\Models\Lancamentos::class, function (Faker\Generator $faker) {
     return [
-        'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
-        'idpedido' => App\Models\Pedidos::pluck('idpedido')->random(),
         'valor' => $faker->randomFloat(2),
         'datahora' => $faker->dateTime,
         'valorpago' => $faker->randomFloat(2),
@@ -79,7 +77,8 @@ $factory->define(App\Models\Pedidos::class, function (Faker\Generator $faker) {
         'previsao' => Carbon::now(-3)->addMinutes(30),
         'valor' => $faker->randomFloat(2),
         'observacoes' => $faker->realText,
-        'status' => $faker->randomElement(['T', 'A', 'C', 'S', 'E'])
+        'status' => $faker->randomElement(['T', 'A', 'C', 'S', 'E']),
+        'idendereco' => App\Models\Enderecos::pluck('idendereco')->random()
     ];
 });
 $factory->define(App\Models\Pedidos_ordem::class, function (Faker\Generator $faker) {

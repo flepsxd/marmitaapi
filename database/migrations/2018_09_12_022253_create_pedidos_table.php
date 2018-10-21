@@ -17,7 +17,7 @@ class CreatePedidosTable extends Migration
             $table->increments('idpedido');
             $table->unsignedInteger('idagendamento')->nullable(true);
             $table->unsignedInteger('idpessoa')->nullable(false);
-            $table->unsignedInteger('idendereco')->nullable(true);
+            $table->unsignedInteger('idendereco')->nullable(false);
             $table->dateTime('datahora')->useCurrent();
             $table->dateTime('previsao');
             $table->decimal('valor', 12, 2);

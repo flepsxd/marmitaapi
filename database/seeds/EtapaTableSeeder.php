@@ -35,7 +35,9 @@ class EtapaTableSeeder extends Seeder
         App\Models\Etapas::create([
             'idetapa' => 5,
             'etapa' => 'C',
-            'descricao' => 'Entregue'
+            'descricao' => 'Entregue',
+            'finalizado' => true,
+            'geralancamento' => true
         ]);
     }
 }

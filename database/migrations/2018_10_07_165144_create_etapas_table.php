@@ -17,6 +17,8 @@ class CreateEtapasTable extends Migration
             $table->increments('idetapa');
             $table->char('etapa', 1)->nullable(false);
             $table->char('descricao')->nullable(false);
+            $table->boolean('finalizado')->default(false);
+            $table->boolean('geralancamento')->default(false);
 
             $table->timestamps();
         });

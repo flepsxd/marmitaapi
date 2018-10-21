@@ -41,8 +41,10 @@ class PedidosController extends Controller
             $dadosAtualizar[$coluna] = @$dados[$coluna];
         }
         $model->fill($dadosAtualizar);
-        $endereco = Enderecos::cadastro($dados['endereco']);
-        $model->endereco()->update($endereco);
+        if(array_has($dados, 'endereco')) {
+            $endereco = Enderecos::cadastro($dados['endereco']);
+            $model->endereco()->update($endereco);
+        }
         $model->save();
 
         foreach ($dados['pedidos_itens'] as $pedido_item) {
@@ -87,8 +89,11 @@ class PedidosController extends Controller
         $novaTimeline = [];
         $model = Pedidos::filtrar($request)->get()->groupBy('pedidos_ordem.idetapa');
         $etapas = Etapas::all();
-        foreach ($etapas as $etapa) {
-            $pedidos = clone $model[$etapa->idetapa];
+        if(count($model) == 0) {
+            return resposta([]);
+        }
+        foreach ($etapas as $index => $etapa) {
+            $pedidos = clone @$model[$etapa->idetapa];
             $pedidos = $pedidos->sortBy(function ($val) {
                 return $val->ordem;
             });
@@ -97,6 +102,8 @@ class PedidosController extends Controller
                 'header' => $etapa->descricao,
                 'filtro' => $etapa->etapa,
                 'idetapa' => $etapa->idetapa,
+                'finalizado' => $etapa->finalizado ? true : false,
+                'geralancamento' => $etapa->geralancamento ? true : false,
                 'dados' => $pedidos->values()
             ];
         }

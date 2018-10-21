@@ -12,7 +12,7 @@ class Pedidos extends Geral
     protected $guarded = ['idpedido'];
     protected $appends = ['etapa', 'ordem', 'status_formatado', 'pessoa_nome'];
     protected $dates = ['datahora', 'previsao'];
-    public $with = ['pessoas.endereco', 'pedidos_itens', 'pedidos_ordem.etapa'];
+    public $with = ['pessoas.endereco', 'pedidos_itens', 'pedidos_ordem.etapa', 'lancamento'];
 
     public function pedidos_itens()
     {
@@ -32,6 +32,10 @@ class Pedidos extends Geral
     public function pedidos_ordem()
     {
         return $this->hasOne(Pedidos_ordem::class, 'idpedido', 'idpedido');
+    }
+
+    public function lancamento() {
+        return $this->hasOne(Lancamentos::class, 'idpedido', 'idpedido');
     }
 
     public function getStatusFormatadoAttribute()

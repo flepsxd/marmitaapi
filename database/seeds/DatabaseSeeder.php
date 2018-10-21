@@ -17,10 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BaseSeeder::class,
             ProductsTableSeeder::class,
-            SchedulesTableSeeder::class,
-            ItemsSchedulesTableSeeder::class,
             RequestsTableSeeder::class,
-            ReleasesTableSeeder::class
+            SchedulesTableSeeder::class,
+            ItemsSchedulesTableSeeder::class
         ]);
         Model::reguard();
     }
