@@ -28,11 +28,11 @@ class PessoasController extends Controller
     {
         $model = Pessoas::find($id);
         $dados = $request->all();
-        $model->fill($dados);
-        if ($request->endereco) {
-            $endereco = Enderecos::cadastro($dados['endereco']);
-            $model->endereco()->update($endereco);
+        if (array_has($dados, 'endereco')) {
+            $dadosEndereco = Enderecos::cadastro($dados['endereco']);
+            Enderecos::updateOrCreate($dadosEndereco);
         }
+        $model->fill($dados);
         $model->save();
         return resposta(Pessoas::find($id));
     }
@@ -41,9 +41,11 @@ class PessoasController extends Controller
     {
         $dados = $request->all();
 
-        $pessoa = new Pessoas($dados);
+        $pessoa = new Pessoas;
         $endereco = Enderecos::cadastro($dados['endereco']);
-        $pessoa->endereco()->create($endereco);
+        $idendereco = Enderecos::create($endereco)->idendereco;
+        $dados['idendereco'] = $idendereco;
+        $pessoa->fill($dados);
         $pessoa->save();
         return resposta(Pessoas::findOrFail($pessoa->idpessoa));
     }

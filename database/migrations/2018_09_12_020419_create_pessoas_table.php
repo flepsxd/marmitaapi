@@ -15,10 +15,10 @@ class CreatePessoasTable extends Migration
     {
         Schema::create('pessoas', function (Blueprint $table) {
             $table->increments('idpessoa');
-            $table->unsignedInteger('idendereco')->nullable(true);
+            $table->unsignedInteger('idendereco')->nullable(false);
             $table->string('nome', 100);
             $table->string('telefone', 20);
-            $table->string('email', 100)->unique()->nullable(false);
+            $table->string('email', 100);
             $table->char('status', 1)->default('A');
             $table->timestamps();
 

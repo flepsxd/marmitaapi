@@ -42,8 +42,8 @@ class PedidosController extends Controller
         }
         $model->fill($dadosAtualizar);
         if(array_has($dados, 'endereco')) {
-            $endereco = Enderecos::cadastro($dados['endereco']);
-            $model->endereco()->update($endereco);
+            $dadosEndereco = Enderecos::cadastro($dados['endereco']);
+            Enderecos::updateOrCreate($dadosEndereco);
         }
         $model->save();
 
@@ -58,10 +58,12 @@ class PedidosController extends Controller
     {
         $dados = $request->all();
 
-        $pedido = new Pedidos($dados);
+        $pedido = new Pedidos;
         $endereco = Enderecos::cadastro($dados['endereco']);
-        $pedido->endereco()->create($endereco);
-        $pedido->save();
+        $idendereco = Enderecos::create($endereco)->idendereco;
+        $dados['idendereco'] = $idendereco;
+        $pessoa->fill($dados);
+        $pessoa->save();
 
         $pedidos_ordem = new Pedidos_ordem([
             'idetapa' => 1,
@@ -72,7 +74,7 @@ class PedidosController extends Controller
 
         $pedido->pedidos_itens()->createMany($dados['pedidos_itens']);
 
-        return resposta(Pedidos::find($pedido->idpedido));
+        return resposta(Pedidos::findOrFail($pedido->idpedido));
     }
 
     public function delete(Request $request, $id)
