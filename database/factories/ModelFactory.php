@@ -110,7 +110,8 @@ $factory->define(App\Models\Usuarios::class, function (Faker\Generator $faker) {
     return [
         'nome' => $faker->unique()->name,
         'email' => $faker->unique()->email,
-        'senha' => Hash::make('12345')
+        'senha' => Hash::make('12345'),
+        'status' => $faker->randomElement(['A', 'I'])
     ];
 });
 

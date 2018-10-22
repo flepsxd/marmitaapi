@@ -20,6 +20,9 @@ $router->post('auth/login', 'AuthController@authenticate');
 $router->group(['prefix' => 'usuarios'], function () use ($router) {
     $router->get('/', 'UsuariosController@index');
     $router->get('/{id}', 'UsuariosController@show');
+    $router->post('/', 'UsuariosController@create');
+    $router->put('/{id}', 'UsuariosController@update');
+    $router->delete('/{id}', 'UsuariosController@delete');
 });
 
 $router->group(['prefix' => 'cidades'], function () use ($router) {

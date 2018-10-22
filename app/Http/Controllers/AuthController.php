@@ -58,7 +58,7 @@ class AuthController extends Controller
             'senha' => 'required'
         ]);
         // Find the user by email
-        $user = User::where('email', $this->request->input('email'))->first();
+        $user = User::where('email', $this->request->input('email'))->where('status', 'A')->first();
         if (!$user) {
             return response()->json([
                 'error' => 'E-mail ou senha estão errados'

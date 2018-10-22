@@ -19,6 +19,7 @@ class JwtMiddleware
             ], 401);
         }
         try {
+            JWT::$leeway = 60;
             $credentials = JWT::decode($token, env('JWT_SECRET'), ['HS256']);
         } catch(ExpiredException $e) {
             return response()->json([

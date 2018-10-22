@@ -14,12 +14,7 @@ class ProdutosController extends Controller
 
     public function index(Request $request)
     {
-        $ativo = $request->input('ativo');
-        if (is_null($ativo)) {
-            return resposta(Produtos::all());
-        } else {
-            return resposta(Produtos::where('status', '=', ($ativo == "true" ? 'A' : 'I'))->get());
-        }
+        return resposta(Produtos::filtrar($request)->get());
     }
 
     public function show(Request $request, $id)

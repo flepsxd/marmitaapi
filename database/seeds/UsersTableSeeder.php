@@ -16,7 +16,8 @@ class UsersTableSeeder extends Seeder
         App\Models\Usuarios::create([
             'email' => 'yurigoular@gmail.com',
             'nome' => 'Yuri Goulart Correa',
-            'senha' => '$2y$12$y6c40JMHL.3N7LVpCo8cheD3E9Mt44iHYXaAV23Y5u12MUXTIR8e.'
+            'senha' => '123456',
+            'status' => 'A'
         ]);
     }
 }

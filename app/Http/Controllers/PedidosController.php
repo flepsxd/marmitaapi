@@ -31,7 +31,7 @@ class PedidosController extends Controller
         $model = Pedidos::find($id);
         $dados = $request->all();
         if (isset($dados['ordem']) && isset($dados['etapa'])) {
-            if ($dados['ordem'] != $model->pedidos_ordem->ordem && $dados['etapa'] != $model->pedidos_ordem->idetapa) {
+            if ($dados['ordem'] != $model->pedidos_ordem->ordem || $dados['etapa'] != $model->pedidos_ordem->idetapa) {
                 $model->pedidos_ordem()->ordenar($request->pedidos_ordem['idpedido_ordem'], $dados['ordem'], $dados['etapa']);
             }
         }
@@ -48,7 +48,11 @@ class PedidosController extends Controller
         $model->save();
 
         foreach ($dados['pedidos_itens'] as $pedido_item) {
-            $model->pedidos_itens()->updateOrCreate(['idpedido_item' => $pedido_item['idpedido_item']], $pedido_item);
+            if(array_has($pedido_item, 'deletar') && $pedido_item['idpedido_item']) {
+                $model->pedidos_itens()->delete(['idpedido_item' => $pedido_item['idpedido_item']]);
+            } else {
+                $model->pedidos_itens()->updateOrCreate(['idpedido_item' => $pedido_item['idpedido_item']], $pedido_item);
+            }
         }
 
         return resposta(Pedidos::find($id));
@@ -62,8 +66,8 @@ class PedidosController extends Controller
         $endereco = Enderecos::cadastro($dados['endereco']);
         $idendereco = Enderecos::create($endereco)->idendereco;
         $dados['idendereco'] = $idendereco;
-        $pessoa->fill($dados);
-        $pessoa->save();
+        $pedido->fill($dados);
+        $pedido->save();
 
         $pedidos_ordem = new Pedidos_ordem([
             'idetapa' => 1,
@@ -95,10 +99,15 @@ class PedidosController extends Controller
             return resposta([]);
         }
         foreach ($etapas as $index => $etapa) {
-            $pedidos = clone @$model[$etapa->idetapa];
-            $pedidos = $pedidos->sortBy(function ($val) {
-                return $val->ordem;
-            });
+            if(array_has($model, $etapa->idetapa)){
+                $pedidos = clone $model[$etapa->idetapa];
+                $pedidos = $pedidos->sortBy(function ($val) {
+                    return $val->ordem;
+                });
+                $pedidos = $pedidos->values();
+            } else {
+                $pedidos = [];
+            }
 
             $novaTimeline[] = [
                 'header' => $etapa->descricao,
@@ -106,7 +115,7 @@ class PedidosController extends Controller
                 'idetapa' => $etapa->idetapa,
                 'finalizado' => $etapa->finalizado ? true : false,
                 'geralancamento' => $etapa->geralancamento ? true : false,
-                'dados' => $pedidos->values()
+                'dados' => $pedidos
             ];
         }
         return resposta($novaTimeline);
