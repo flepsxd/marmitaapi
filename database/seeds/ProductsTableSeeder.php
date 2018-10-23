@@ -12,6 +12,6 @@ class ProductsTableSeeder extends Seeder
     public function run()
     {
         // create 10 users using the user factory
-        factory(App\Models\Produtos::class, 20)->create();
+        factory(App\Models\Produtos::class, 40)->create();
     }
 }

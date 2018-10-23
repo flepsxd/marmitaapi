@@ -16,10 +16,10 @@ class BaseSeeder extends Seeder
         // Register the user seeder
         $this->call([
             UsersTableSeeder::class,
-            //CityTableSeeder::class,
-            //NeightbourhoodTableSeeder::class,
-            //AddressTableSeeder::class,
-            //PersonTableSeeder::class,
+            CityTableSeeder::class,
+            NeightbourhoodTableSeeder::class,
+            AddressTableSeeder::class,
+            PersonTableSeeder::class,
             EtapaTableSeeder::class
         ]);
         Model::reguard();

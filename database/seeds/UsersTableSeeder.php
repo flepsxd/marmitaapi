@@ -19,5 +19,11 @@ class UsersTableSeeder extends Seeder
             'senha' => '123456',
             'status' => 'A'
         ]);
+        App\Models\Usuarios::create([
+            'email' => 'adm@adm.com',
+            'nome' => 'Teste',
+            'senha' => 'adm',
+            'status' => 'A'
+        ]);
     }
 }
