@@ -69,13 +69,6 @@ class PedidosController extends Controller
         $pedido->fill($dados);
         $pedido->save();
 
-        $pedidos_ordem = new Pedidos_ordem([
-            'idetapa' => 1,
-            'ordem' => (Pedidos_ordem::where('idetapa', 1)->max('ordem') + 1)
-        ]);
-        $pedidos_ordem->pedido()->associate($pedido);
-        $pedidos_ordem->save();
-
         $pedido->pedidos_itens()->createMany($dados['pedidos_itens']);
 
         return resposta(Pedidos::findOrFail($pedido->idpedido));
@@ -94,6 +87,10 @@ class PedidosController extends Controller
     {
         $novaTimeline = [];
         $model = Pedidos::filtrar($request)->get()->groupBy('pedidos_ordem.idetapa');
+        $datahora = @$request->input('filter')->datahora;
+        if($datahora) {
+            $hoje = Carbon::parse($datahora)->isToday();
+        }
         $etapas = Etapas::all();
         if(count($model) == 0) {
             return resposta([]);

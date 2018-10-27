@@ -15,16 +15,23 @@ use Carbon\Carbon;
 
 $factory->define(App\Models\Agendamentos_itens::class, function (Faker\Generator $faker) {
     return [
-        'idagendamento' => App\Models\Agendamentos::pluck('idagendamento')->random(),
-        'idproduto' => App\Models\Produtos::pluck('idproduto')->random(),
-        'quantidade' => $faker->randomDigit
+        'vlrunitario' => $faker->randomFloat(2),
+        'quantidade' => $faker->randomDigit,
+        'vlrtotal' => $faker->randomFloat(2),
+        'desconto' => $faker->randomFloat(2),
+        'idproduto' => App\Models\Produtos::pluck('idproduto')->random()
     ];
 });
 
 $factory->define(App\Models\Agendamentos::class, function (Faker\Generator $faker) {
+    $hora = Carbon::now();
     return [
         'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
-        'status' => $faker->randomElement(['A', 'I'])
+        'status' => $faker->randomElement(['A', 'I']),
+        'hora' => Carbon::now(-3),
+        'previsao' => Carbon::now(-3)->addMinutes(30),
+        'observacoes' => $faker->realText,
+        'proximodia' => true
     ];
 });
 
@@ -75,7 +82,6 @@ $factory->define(App\Models\Pedidos::class, function (Faker\Generator $faker) {
         'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
         'datahora' => Carbon::now(-3),
         'previsao' => Carbon::now(-3)->addMinutes(30),
-        'valor' => $faker->randomFloat(2),
         'observacoes' => $faker->realText,
         'status' => $faker->randomElement(['T', 'A', 'C', 'S', 'E']),
         'idendereco' => App\Models\Enderecos::pluck('idendereco')->random()

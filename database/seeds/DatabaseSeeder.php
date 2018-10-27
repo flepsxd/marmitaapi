@@ -18,8 +18,7 @@ class DatabaseSeeder extends Seeder
             BaseSeeder::class,
             ProductsTableSeeder::class,
             RequestsTableSeeder::class,
-            SchedulesTableSeeder::class,
-            ItemsSchedulesTableSeeder::class
+            SchedulesTableSeeder::class
         ]);
         Model::reguard();
     }

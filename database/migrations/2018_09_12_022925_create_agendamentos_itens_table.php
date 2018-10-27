@@ -17,7 +17,10 @@ class CreateAgendamentositensTable extends Migration
             $table->increments('idagendamento_item');
             $table->unsignedInteger('idagendamento')->nullable(true);
             $table->unsignedInteger('idproduto')->nullable(true);
-            $table->unsignedInteger('quantidade');
+            $table->decimal('vlrunitario', 15, 2)->default(0)->nullable(true);
+            $table->unsignedInteger('quantidade')->default(1)->nullable(true);
+            $table->decimal('vlrtotal', 15, 2)->default(0)->nullable(true);
+            $table->decimal('desconto', 15, 2)->default(0)->nullable(true);
             $table->timestamps();
 
             $table->foreign('idagendamento')->references('idagendamento')->on('agendamentos');

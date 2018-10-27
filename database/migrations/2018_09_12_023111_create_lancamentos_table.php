@@ -20,7 +20,7 @@ class CreateLancamentosTable extends Migration
             $table->decimal('valor', 15, 2);
             $table->dateTime('datahora')->useCurrent();
             $table->decimal('valorpago', 15, 2);
-            $table->date('datapagto');
+            $table->dateTime('datapagto')->useCurrent();
             $table->timestamps();
 
             $table->foreign('idpessoa')->references('idpessoa')->on('pessoas');

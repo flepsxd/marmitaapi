@@ -17,6 +17,12 @@ class CreateAgendamentosTable extends Migration
             $table->increments('idagendamento');
             $table->unsignedInteger('idpessoa')->nullable(false);
             $table->char('status', 1)->default('A');
+            $table->time('hora')->useCurrent();
+            $table->time('previsao');
+            $table->decimal('valor', 12, 2);
+            $table->string('observacoes', 300);
+            $table->boolean('proximodia')->default(true);
+            
             $table->timestamps();
 
             $table->foreign('idpessoa')->references('idpessoa')->on('pessoas');

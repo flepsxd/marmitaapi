@@ -19,4 +19,20 @@ class Pedidos_itens extends Geral
     {
         return $this->hasOne(Produtos::class, 'idproduto', 'idproduto');
     }
+
+    public static function posAtualizar($model) {
+        static::atualizarValor($model);
+    }
+
+    public static function posAdicionar($model) {
+        static::atualizarValor($model);
+    }
+    
+    public static function atualizarValor($item) {
+        $pedido = Pedidos::find($item->idpedido);
+        $itens = $pedido->pedidos_itens;
+        $valor = $itens->sum(function($val) { return $val->vlrtotal; });
+        $pedido->fill(['valor'=>$valor]);
+        $pedido->save();
+    } 
 }

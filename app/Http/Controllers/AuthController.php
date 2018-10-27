@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Models\Usuarios as User;
+use App\Models\Agendamentos;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Firebase\JWT\ExpiredException;
@@ -59,6 +60,8 @@ class AuthController extends Controller
         ]);
         // Find the user by email
         $user = User::where('email', $this->request->input('email'))->where('status', 'A')->first();
+        
+        Agendamentos::geraPedidos();
         if (!$user) {
             return response()->json([
                 'error' => 'E-mail ou senha estão errados'

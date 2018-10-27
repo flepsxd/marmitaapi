@@ -9,13 +9,29 @@ class Agendamentos_itens extends Geral
     protected $fillable = ['idagendamento', 'idproduto', 'quantidade'];
     protected $guarded = ['idagendamento_item'];
 
-    public function agendamentos()
+    public function agendamento()
     {
-        return $this->belongsTo(App\Models\Agendamentos::class);
+        return $this->belongsTo(Agendamentos::class, 'idagendamento', 'idagendamento');
     }
 
-    public function produtos()
+    public function produto()
     {
-        return $this->belongsTo(App\Models\Produtos::class);
+        return $this->belongsTo(Produtos::class, 'idproduto', 'idproduto');
     }
+
+    public static function posAtualizar($model) {
+        self::atualizarValor($model);
+    }
+
+    public static function posAdicionar($model) {
+        self::atualizarValor($model);
+    }
+    
+    public static function atualizarValor($item) {
+        $agendamento = Agendamentos::find($item->idagendamento);
+        $itens = $agendamento->agendamento_itens;
+        $valor = $itens->sum(function($val) { return $val->vlrtotal; });
+        $agendamento->fill(['valor'=>$valor]);
+        $agendamento->save();
+    } 
 }

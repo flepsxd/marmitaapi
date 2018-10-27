@@ -38,6 +38,10 @@ class Pedidos extends Geral
         return $this->hasOne(Lancamentos::class, 'idpedido', 'idpedido');
     }
 
+    public function agendamento() {
+        return $this->belongsTo(Agendamentos::class, 'idagendamento', 'idagendamento');
+    }
+
     public function getStatusFormatadoAttribute()
     {
         return $this->pedidos_ordem->etapa->descricao;
@@ -65,5 +69,15 @@ class Pedidos extends Geral
         return $this->attributes['previsao'] = Carbon::parse($value);
 
     }
+
+    public static function posAdicionar($model) {
+        $pedidos_ordem = new Pedidos_ordem([
+            'idetapa' => 1,
+            'ordem' => (Pedidos_ordem::where('idetapa', 1)->max('ordem') + 1),
+            'idpedido' => $model->idpedido
+        ]);
+        $pedidos_ordem->save();
+    }
+
 
 }

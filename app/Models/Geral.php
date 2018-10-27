@@ -51,4 +51,52 @@ class Geral extends Model
         }
         return $query;
     }
+
+    public static function preAdicionar($model) {
+
+    }
+    public static function posAdicionar($model) {
+
+    }
+    public static function preAtualizar($model) {
+
+    }
+    public static function posAtualizar($model) {
+
+    }
+    public static function preDeletar($model) {
+
+    }
+    public static function posDeletar($model) {
+
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($model){
+            static::preAdicionar($model);
+        });
+
+        static::created(function($model){
+            static::posAdicionar($model);
+        });
+
+        static::updating(function($model){
+            static::preAtualizar($model);
+        });
+
+        static::updated(function($model){
+            static::posAtualizar($model);
+        });
+
+        static::deleting(function($model){
+            static::preDeletar($model);
+        });
+
+        static::deleted(function($model) {
+            static::posDeletar($model);
+        });
+    }
 }
