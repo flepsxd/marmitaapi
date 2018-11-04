@@ -7,6 +7,7 @@ use App\Models\Etapas;
 use App\Models\Pedidos_ordem;
 use App\Models\Enderecos;
 use App\Models\Pedidos_itens;
+use App\Models\Agendamentos;
 use Illuminate\Http\Request;
 
 class PedidosController extends Controller
@@ -87,14 +88,12 @@ class PedidosController extends Controller
     {
         $novaTimeline = [];
         $model = Pedidos::filtrar($request)->get()->groupBy('pedidos_ordem.idetapa');
-        $datahora = @$request->input('filter')->datahora;
+        $datahora = json_decode(@$request->input('filter'))->datahora;
+        $agendamentos = [];
         if($datahora) {
-            $hoje = Carbon::parse($datahora)->isToday();
+            $agendamentos = Agendamentos::proximosAgendamentos($datahora)->values();            
         }
         $etapas = Etapas::all();
-        if(count($model) == 0) {
-            return resposta([]);
-        }
         foreach ($etapas as $index => $etapa) {
             if(array_has($model, $etapa->idetapa)){
                 $pedidos = clone $model[$etapa->idetapa];
@@ -114,6 +113,9 @@ class PedidosController extends Controller
                 'geralancamento' => $etapa->geralancamento ? true : false,
                 'dados' => $pedidos
             ];
+            if($index == 0) {
+                $novaTimeline[0]['agendamentos'] = $agendamentos;
+            }
         }
         return resposta($novaTimeline);
     }

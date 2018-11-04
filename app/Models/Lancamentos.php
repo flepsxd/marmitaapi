@@ -8,6 +8,7 @@ class Lancamentos extends Geral
     protected $primaryKey = 'idlancamento';
     protected $fillable = ['idpessoa', 'idpedido', 'valor', 'datahora', 'valorpago', 'datapagto'];
     protected $guarded = ['idlancamento'];
+    protected $appends = ['pessoa_nome'];
     public $with = ['pessoa'];
 
     public function pedidos()
@@ -22,5 +23,10 @@ class Lancamentos extends Geral
 
     public function pessoa() {
         return $this->hasOne(Pessoas::class, 'idpessoa', 'idpessoa');
+    }
+
+    public function getPessoaNomeAttribute()
+    {
+        return $this->pessoa->nome;
     }
 }

@@ -33,11 +33,30 @@ class Agendamentos extends Geral
         return $this->pessoa->nome;
     }
 
+    public function scopeProximosAgendamentos($query, $datahora) {
+        $datahora = Carbon::parse($datahora);
+        $amanha = $datahora->isTomorrow();
+        $futuro = $datahora->isFuture();
+        if ($futuro) {
+            $agendamentos = Agendamentos::when($amanha, function($query) {
+                $query->where('proximodia', true);
+            });
+            return $agendamentos = $agendamentos
+                ->where('status', 'A')
+                ->get();
+        } else {
+            return collect([]);
+        }
+    }
+
     public static function geraPedidos() 
     {
         $agendamentosHoje = Agendamentos::where('proximodia', true)
                 ->where('status', 'A')
-                ->doesntHave('pedido')
+                ->doesntHave('pedido', 'and', function($query) {
+                    $data = Carbon::now()->toDateString();
+                    $query->whereDate('datahora', $data);
+                })
                 ->get();
         
 
@@ -57,6 +76,8 @@ class Agendamentos extends Geral
                 unset($item->idagendamento);
                 return $item;
             });
+            $agendamento->fill(['proximodia'=> true]);
+            $agendamento->save();
             $pedido->pedidos_itens()->createMany($itens->toArray());
             $pedido->save();
         }

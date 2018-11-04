@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Exception;
 use App\Models\Usuarios;
+use App\Models\Agendamentos;
 use Firebase\JWT\JWT;
 use Firebase\JWT\ExpiredException;
 class JwtMiddleware
@@ -19,7 +20,7 @@ class JwtMiddleware
             ], 401);
         }
         try {
-            JWT::$leeway = 60;
+            JWT::$leeway = 10;
             $credentials = JWT::decode($token, env('JWT_SECRET'), ['HS256']);
         } catch(ExpiredException $e) {
             return response()->json([
@@ -33,6 +34,7 @@ class JwtMiddleware
         $user = Usuarios::find($credentials->sub);
         // Now let's put the user in the request class so that you can grab it from there
         $request->auth = $user;
+        Agendamentos::geraPedidos();
         return $next($request);
     }
 }

@@ -8,6 +8,7 @@ class Agendamentos_itens extends Geral
     protected $primaryKey = 'idagendamento_item';
     protected $fillable = ['idagendamento', 'idproduto', 'quantidade'];
     protected $guarded = ['idagendamento_item'];
+    public $with = ['produto'];
 
     public function agendamento()
     {
