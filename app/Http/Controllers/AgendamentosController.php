@@ -21,16 +21,37 @@ class AgendamentosController extends Controller
 
     public function update(Request $request, $id){
         $model = Agendamentos::find($id);
-        $model->fill($request->all());
+        $dados = $request->all();
+
+        $dadosAtualizar = [];
+        $agendamentos = new Agendamentos();
+        foreach ($agendamentos->getFillable() as $coluna) {
+            $dadosAtualizar[$coluna] = @$dados[$coluna];
+        }
+        $model->fill($dadosAtualizar);
         $model->save();
-        return resposta($model);   
+
+        foreach ($dados['agendamento_itens'] as $agendamento_item) {
+            if(array_has($agendamento_item, 'deletar') && $agendamento_item['idagendamento_item']) {
+                $model->agendamento_itens()->delete(['idagendamento_item' => $agendamento_item['idagendamento_item']]);
+            } else {
+                $model->agendamento_itens()->updateOrCreate(['idagendamento_item' => $agendamento_item['idagendamento_item']], $agendamento_item);
+            }
+        }
+
+        return resposta(Agendamentos::find($id));
     }
 
     public function create(Request $request){
-        $model = new Agendamentos;
-        $model->fill($request->all());
-        $model->save();
-        return resposta($model);    
+        $dados = $request->all();
+
+        $agendamento = new Agendamentos;
+        $agendamento->fill($dados);
+        $agendamento->save();
+
+        $agendamento->agendamento_itens()->createMany($dados['agendamento_itens']);
+
+        return resposta(Agendamentos::findOrFail($agendamento->idpedido)); 
     }
 
     public function delete(Request $request, $id){

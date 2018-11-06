@@ -6,7 +6,7 @@ class Agendamentos_itens extends Geral
 {
     protected $table = 'agendamentos_itens';
     protected $primaryKey = 'idagendamento_item';
-    protected $fillable = ['idagendamento', 'idproduto', 'quantidade'];
+    protected $fillable = ['idagendamento', 'idproduto', 'vlrunitario', 'quantidade', 'vlrtotal', 'desconto'];
     protected $guarded = ['idagendamento_item'];
     public $with = ['produto'];
 

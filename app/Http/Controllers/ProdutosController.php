@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produtos;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProdutosController extends Controller
 {
@@ -40,7 +41,20 @@ class ProdutosController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $model = Produtos::find($id);
+        $produto = Produtos::doesntHave('pedidos_itens', 'and', function($query) use ($id) {
+                        $query->where('idproduto', $id);
+                    });
+        if(!$produto) {
+            $produto = Produtos::doesntHave('agendamentos_itens', 'and', function($query) use ($id) {
+                $query->where('idproduto', $id);
+            });
+        }
+        if ($produto) {
+            return resposta(null, ['idproduto' => 'Produto vinculado a um pedido ou agendamento'], 422);
+        }
+            
+
+        $model = Produtos::find($id);       
         if ($model) {
             return resposta($model->delete());
         }

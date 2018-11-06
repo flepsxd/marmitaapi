@@ -51,10 +51,10 @@ $router->group(['prefix' => 'pessoas'], function () use ($router) {
 
 $router->group(['prefix' => 'produtos'], function () use ($router) {
     $router->get('/', 'ProdutosController@index');
-    $router->get('/{id}', 'ProdutosController@show');
+    $router->get('/{idproduto}', 'ProdutosController@show');
     $router->post('/', 'ProdutosController@create');
-    $router->put('/{id}', 'ProdutosController@update');
-    $router->delete('/{id}', 'ProdutosController@delete');
+    $router->put('/{idproduto}', 'ProdutosController@update');
+    $router->delete('/{idproduto}', 'ProdutosController@delete');
 });
 
 $router->group(['prefix' => 'enderecos'], function () use ($router) {
