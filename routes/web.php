@@ -115,3 +115,7 @@ $router->group(['prefix' => 'etapas'], function () use ($router) {
     $router->delete('/{id}', 'EtapasController@delete');
 });
 
+
+$router->group(['prefix' => 'relatorios'], function() use ($router) {
+    $router->get('/', 'RelatoriosController@index');
+});

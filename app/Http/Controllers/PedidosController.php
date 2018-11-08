@@ -19,12 +19,12 @@ class PedidosController extends Controller
 
     public function index(Request $request)
     {
-        return resposta(Pedidos::filtrar($request)->get());
+        return resposta(Pedidos::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id)
     {
-        return resposta(Pedidos::find($id));
+        return resposta(Pedidos::loadGet()->find($id));
     }
 
     public function update(Request $request, $id)
@@ -87,11 +87,11 @@ class PedidosController extends Controller
     public function timeline(Request $request)
     {
         $novaTimeline = [];
-        $model = Pedidos::filtrar($request)->get()->groupBy('pedidos_ordem.idetapa');
+        $model = Pedidos::filtrar($request)->loadGet()->groupBy('pedidos_ordem.idetapa');
         $datahora = json_decode(@$request->input('filter'))->datahora;
         $agendamentos = [];
         if($datahora) {
-            $agendamentos = Agendamentos::proximosAgendamentos($datahora)->values();            
+            $agendamentos = Agendamentos::proximosAgendamentos($datahora)->loadGet()->values();            
         }
         $etapas = Etapas::all();
         foreach ($etapas as $index => $etapa) {

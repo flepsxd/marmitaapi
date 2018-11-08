@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usuarios;
+use App\Http\Controllers\Controller;
 
 class UsuariosController extends Controller
 {
@@ -20,6 +21,11 @@ class UsuariosController extends Controller
     }
 
     public function update(Request $request, $id){
+        $this->validate($request, [
+            'nome' => 'required|unique',
+            'email' => 'required|email|unique:usuarios',
+            'senha' => 'required'
+        ]);
         $model = Usuarios::find($id);
         $model->fill($request->all());
         $model->save();
@@ -27,6 +33,11 @@ class UsuariosController extends Controller
     }
 
     public function create(Request $request){
+        $this->validate($request, [
+            'nome' => 'required',
+            'email' => 'required|email|unique:usuarios',
+            'senha' => 'required'
+        ]);
         $model = new Usuarios;
         $model->fill($request->all());
         $model->save();

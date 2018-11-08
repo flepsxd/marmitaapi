@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Schema;
 
 class Geral extends Model
 {
+    public $dependencias = [];
 
     public function scopeFiltrar($query, $request) {
         if ($request->has('filter')) {
@@ -42,14 +44,24 @@ class Geral extends Model
         return $query;
     }
     private function whereFiltrar(&$query, $key, $dates, $value) {
-        if(in_array($key, $dates)) {
-            $query = $query->whereDate($key, Carbon::parse($value)->toDateString());
-        } else if(is_string($value) || is_numeric($value)) {
-            $query = $query->where($key, $value);
-        } else if(is_array($value)) {
-            $query = $query->whereIn($key, $value);
+        if(in_array($key, Schema::getColumnListing($this->getTable()))){
+            if(in_array($key, $dates)) {
+                $query = $query->whereDate($key, Carbon::parse($value)->toDateString());
+            } else if(is_string($value) || is_numeric($value)) {
+                $query = $query->where($key, $value);
+            } else if(is_array($value)) {
+                $query = $query->whereIn($key, $value);
+            }
         }
         return $query;
+    }
+
+    public function scopeLoadGet($query, $get = false) {
+        $dependencias = @$this->dependencias;
+        $appends = @$this->calculados;
+        $query->with($dependencias);
+        $query->append = $appends;
+        return $get ? $query->get() : $query;
     }
 
     public static function preAdicionar($model) {

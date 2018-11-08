@@ -8,7 +8,7 @@ class Agendamentos_itens extends Geral
     protected $primaryKey = 'idagendamento_item';
     protected $fillable = ['idagendamento', 'idproduto', 'vlrunitario', 'quantidade', 'vlrtotal', 'desconto'];
     protected $guarded = ['idagendamento_item'];
-    public $with = ['produto'];
+    public $dependencias = ['produto'];
 
     public function agendamento()
     {
@@ -17,7 +17,7 @@ class Agendamentos_itens extends Geral
 
     public function produto()
     {
-        return $this->belongsTo(Produtos::class, 'idproduto', 'idproduto');
+        return $this->hasOne(Produtos::class, 'idproduto', 'idproduto');
     }
 
     public static function posAtualizar($model) {

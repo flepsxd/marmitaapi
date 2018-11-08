@@ -10,8 +10,8 @@ class Agendamentos extends Geral
     protected $primaryKey = 'idagendamento';
     protected $fillable = [ 'idpessoa', 'status', 'idpessoa', 'hora', 'previsao', 'valor', 'observacoes', 'status' ];
     protected $guarded = ['idagendamento'];
-    protected $appends = ['pessoa_nome'];
-    public $with = ['agendamento_itens'];
+    protected $calculados = ['pessoa_nome'];
+    public $dependencias = ['agendamento_itens'];
 
     public function agendamento_itens()
     {

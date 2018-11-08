@@ -8,8 +8,8 @@ class Lancamentos extends Geral
     protected $primaryKey = 'idlancamento';
     protected $fillable = ['idpessoa', 'idpedido', 'valor', 'datahora', 'valorpago', 'datapagto'];
     protected $guarded = ['idlancamento'];
-    protected $appends = ['pessoa_nome'];
-    public $with = ['pessoa'];
+    protected $calculados = ['pessoa_nome'];
+    public $dependencias = ['pessoa'];
 
     public function pedidos()
     {

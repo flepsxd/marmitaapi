@@ -12,11 +12,11 @@ class LancamentosController extends Controller
     }
         
     public function index(Request $request){
-        return resposta(Lancamentos::all());
+        return resposta(Lancamentos::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id){
-        return resposta(Lancamentos::find($id));
+        return resposta(Lancamentos::loadGet()->find($id));
     }
 
     public function update(Request $request, $id){

@@ -14,12 +14,12 @@ class EtapasController extends Controller
 
     public function index(Request $request)
     {
-        return resposta(Etapas::all());
+        return resposta(Etapas::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id)
     {
-        return resposta(Etapas::find($id));
+        return resposta(Etapas::loadGet()->find($id));
     }
 
     public function update(Request $request, $id)

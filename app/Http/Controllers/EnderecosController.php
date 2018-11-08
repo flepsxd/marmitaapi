@@ -12,11 +12,11 @@ class EnderecosController extends Controller
     }
         
     public function index(Request $request){
-        return resposta(Enderecos::all());
+        return resposta(Enderecos::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id){
-        return resposta(Enderecos::find($id));
+        return resposta(Enderecos::loadGet()->find($id));
     }
 
     public function update(Request $request, $id){

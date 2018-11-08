@@ -12,11 +12,11 @@ class AgendamentosController extends Controller
     }
         
     public function index(Request $request){
-        return resposta(Agendamentos::all());
+        return resposta(Agendamentos::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id){
-        return resposta(Agendamentos::find($id));
+        return resposta(Agendamentos::loadGet()->find($id));
     }
 
     public function update(Request $request, $id){
@@ -39,7 +39,7 @@ class AgendamentosController extends Controller
             }
         }
 
-        return resposta(Agendamentos::find($id));
+        return resposta(Agendamentos::find($id)->loadGet());
     }
 
     public function create(Request $request){

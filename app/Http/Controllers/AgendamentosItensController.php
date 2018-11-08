@@ -12,11 +12,11 @@ class AgendamentosItensController extends Controller
     }
         
     public function index(Request $request){
-        return resposta(Agendamentos_itens::all());
+        return resposta(Agendamentos_itens::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id){
-        return resposta(Agendamentos_itens::find($id));
+        return resposta(Agendamentos_itens::loadGet()->find($id));
     }
 
     public function update(Request $request, $id){

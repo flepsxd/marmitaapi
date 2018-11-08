@@ -15,12 +15,12 @@ class ProdutosController extends Controller
 
     public function index(Request $request)
     {
-        return resposta(Produtos::filtrar($request)->get());
+        return resposta(Produtos::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id)
     {
-        return resposta(Produtos::find($id));
+        return resposta(Produtos::loadGet()->find($id));
     }
 
     public function update(Request $request, $id)

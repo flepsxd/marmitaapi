@@ -8,12 +8,17 @@ class Pessoas extends Geral
     protected $primaryKey = 'idpessoa';
     protected $fillable = ['nome', 'telefone', 'email', 'status', 'idendereco'];
     protected $guarded = ['idpessoa'];
-    protected $appends = ['status_formatado'];
-    public $with = ['endereco'];
+    protected $calculados = ['status_formatado'];
+    public $dependencias = ['endereco'];
 
     public function pedidos()
     {
-        return $this->belongsToMany(Pedidos::class, 'idpessoa', 'idpessoa');
+        return $this->hasMany(Pedidos::class, 'idpessoa', 'idpessoa');
+    }
+
+    public function agendamentos()
+    {
+        return $this->hasMany(Agendamentos::class, 'idpessoa', 'idpessoa');
     }
 
     public function endereco()
@@ -23,5 +28,27 @@ class Pessoas extends Geral
 
     public function getStatusFormatadoAttribute() {
         return $this->status == 'A' ? 'Ativo' : 'Inativo';
+    }
+
+    public function getItemsAttribute() {
+        $items = [];
+        foreach($this->pedidos as $pedido) {
+            $pedidos_itens = $pedido->pedidos_itens;
+            foreach($pedidos_itens as $pedido_item) {
+                $item = @$items[$pedido_item->idproduto];
+                if(!$item) {
+                    $item = [
+                        'produto' => $pedido_item->produto->descricao,
+                        'valor' => 0,
+                        'quantidade' => 0,
+                        'status_formatado' => $pedido_item->produto->status_formatado
+                    ];
+                }
+                $item['valor'] += floatval($pedido_item->vlrtotal);
+                $item['quantidade'] += floatval($pedido_item->quantidade);
+                $items[$pedido_item->idproduto] = $item;
+            }
+        }
+        return $items;
     }
 }

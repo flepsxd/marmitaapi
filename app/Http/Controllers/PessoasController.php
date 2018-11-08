@@ -15,13 +15,12 @@ class PessoasController extends Controller
 
     public function index(Request $request)
     {
-        $pessoas = Pessoas::filtrar($request);
-        return resposta($pessoas->get());
+        return resposta(Pessoas::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id)
     {
-        return resposta(Pessoas::find($id));
+        return resposta(Pessoas::loadGet()->find($id));
     }
 
     public function update(Request $request, $id)
@@ -52,6 +51,17 @@ class PessoasController extends Controller
 
     public function delete(Request $request, $id)
     {
+        $pessoa = Pessoas::doesntHave('pedidos', 'and', function($query) use ($id) {
+            $query->where('idpessoa', $id);
+        });
+        if(!$pessoa) {
+        $pessoa = Pessoas::doesntHave('agendamentos', 'and', function($query) use ($id) {
+            $query->where('idpessoa', $id);
+        });
+        }
+        if ($pessoa) {
+        return resposta(null, ['idpessoa' => 'Pessoa vinculada a um pedido ou agendamento'], 422);
+        }
         $model = Pessoas::find($id);
         if ($model) {
             return resposta($model->delete());

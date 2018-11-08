@@ -15,12 +15,12 @@ class PedidosItensController extends Controller
     public function index(Request $request)
     {
 
-        return resposta(Pedidos_itens::with('produtos')->get());
+        return resposta(Pedidos_itens::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id)
     {
-        return resposta(Pedidos_itens::where('idpedido_item', '=', $id)->with('produto')->first());
+        return resposta(Pedidos_itens::loadGet()->find($id));
     }
 
     public function update(Request $request, $id)

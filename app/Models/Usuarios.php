@@ -11,7 +11,7 @@ class Usuarios extends Geral
     protected $fillable = [ 'nome', 'email', 'senha', 'status' ];
     protected $guarded = ['id'];
     protected $hidden = [ 'senha' ];
-    protected $appends = ['status_formatado'];
+    protected $calculados = ['status_formatado'];
 
     public function setSenhaAttribute($value) {
         $this->attributes['senha'] = Hash::make($value);
