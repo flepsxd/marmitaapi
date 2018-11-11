@@ -10,8 +10,8 @@ class Pedidos extends Geral
     protected $primaryKey = 'idpedido';
     protected $fillable = ['idagendamento', 'idendereco', 'idpessoa', 'datahora', 'previsao', 'valor', 'observacoes', 'status'];
     protected $guarded = ['idpedido'];
-    protected $calculados = ['etapa', 'ordem', 'status_formatado', 'pessoa_nome'];
     protected $dates = ['datahora', 'previsao'];
+    public $calculados = ['etapa', 'ordem', 'status_formatado', 'pessoa_nome'];
     public $dependencias = ['pessoa.endereco', 'pedidos_itens.produto', 'pedidos_ordem.etapa', 'lancamento'];
 
     public function pedidos_itens()

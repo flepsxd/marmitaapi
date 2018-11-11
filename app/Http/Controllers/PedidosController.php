@@ -87,11 +87,11 @@ class PedidosController extends Controller
     public function timeline(Request $request)
     {
         $novaTimeline = [];
-        $model = Pedidos::filtrar($request)->loadGet()->groupBy('pedidos_ordem.idetapa');
+        $model = Pedidos::filtrar($request)->loadGet(true, false)->groupBy('pedidos_ordem.idetapa');
         $datahora = json_decode(@$request->input('filter'))->datahora;
         $agendamentos = [];
         if($datahora) {
-            $agendamentos = Agendamentos::proximosAgendamentos($datahora)->loadGet()->values();            
+            $agendamentos = Agendamentos::proximosAgendamentos($datahora)->loadGet(true);
         }
         $etapas = Etapas::all();
         foreach ($etapas as $index => $etapa) {

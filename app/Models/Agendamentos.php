@@ -11,7 +11,7 @@ class Agendamentos extends Geral
     protected $fillable = [ 'idpessoa', 'status', 'idpessoa', 'hora', 'previsao', 'valor', 'observacoes', 'status' ];
     protected $guarded = ['idagendamento'];
     protected $calculados = ['pessoa_nome'];
-    public $dependencias = ['agendamento_itens'];
+    public $dependencias = ['agendamento_itens', 'pessoa'];
 
     public function agendamento_itens()
     {
@@ -42,10 +42,9 @@ class Agendamentos extends Geral
                 $query->where('proximodia', true);
             });
             return $agendamentos = $agendamentos
-                ->where('status', 'A')
-                ->get();
+                ->where('status', 'A');
         } else {
-            return collect([]);
+            return Agendamentos::whereRaw('0=1');
         }
     }
 

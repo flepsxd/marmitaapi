@@ -8,7 +8,7 @@ class Pessoas extends Geral
     protected $primaryKey = 'idpessoa';
     protected $fillable = ['nome', 'telefone', 'email', 'status', 'idendereco'];
     protected $guarded = ['idpessoa'];
-    protected $calculados = ['status_formatado'];
+    public $appends = ['status_formatado'];
     public $dependencias = ['endereco'];
 
     public function pedidos()
@@ -41,11 +41,13 @@ class Pessoas extends Geral
                         'produto' => $pedido_item->produto->descricao,
                         'valor' => 0,
                         'quantidade' => 0,
+                        'qntdpedido' => 0,
                         'status_formatado' => $pedido_item->produto->status_formatado
                     ];
                 }
                 $item['valor'] += floatval($pedido_item->vlrtotal);
                 $item['quantidade'] += floatval($pedido_item->quantidade);
+                $item['qntdpedido'] += 1;
                 $items[$pedido_item->idproduto] = $item;
             }
         }

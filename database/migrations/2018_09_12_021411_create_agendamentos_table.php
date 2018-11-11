@@ -15,7 +15,7 @@ class CreateAgendamentosTable extends Migration
     {
         Schema::create('agendamentos', function (Blueprint $table) {
             $table->increments('idagendamento');
-            $table->unsignedInteger('idpessoa')->nullable(false);
+            $table->unsignedInteger('idpessoa')->nullable(true);
             $table->char('status', 1)->default('A');
             $table->time('hora')->useCurrent();
             $table->time('previsao');
@@ -25,7 +25,7 @@ class CreateAgendamentosTable extends Migration
             
             $table->timestamps();
 
-            $table->foreign('idpessoa')->references('idpessoa')->on('pessoas');
+            $table->foreign('idpessoa')->references('idpessoa')->on('pessoas')->onDelete('set null');
         });
     }
 

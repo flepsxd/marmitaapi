@@ -23,8 +23,8 @@ class CreateAgendamentositensTable extends Migration
             $table->decimal('desconto', 15, 2)->default(0)->nullable(true);
             $table->timestamps();
 
-            $table->foreign('idagendamento')->references('idagendamento')->on('agendamentos');
-            $table->foreign('idproduto')->references('idproduto')->on('produtos');
+            $table->foreign('idagendamento')->references('idagendamento')->on('agendamentos')->onDelete('cascade');
+            $table->foreign('idproduto')->references('idproduto')->on('produtos')->onDelete('set null');
         });
     }
 

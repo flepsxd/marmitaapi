@@ -16,7 +16,7 @@ class CreatePedidosTable extends Migration
         Schema::create('pedidos', function (Blueprint $table) {
             $table->increments('idpedido');
             $table->unsignedInteger('idagendamento')->nullable(true);
-            $table->unsignedInteger('idpessoa')->nullable(false);
+            $table->unsignedInteger('idpessoa')->nullable(true);
             $table->unsignedInteger('idendereco')->nullable(false);
             $table->dateTime('datahora')->useCurrent();
             $table->dateTime('previsao');
@@ -25,7 +25,7 @@ class CreatePedidosTable extends Migration
             $table->char('status', 1)->default('N');
             $table->timestamps();
 
-            $table->foreign('idpessoa')->references('idpessoa')->on('pessoas');
+            $table->foreign('idpessoa')->references('idpessoa')->on('pessoas')->onDelete('set null');
             $table->foreign('idagendamento')->references('idagendamento')->on('agendamentos');
             $table->foreign('idendereco')->references('idendereco')->on('enderecos');
         });

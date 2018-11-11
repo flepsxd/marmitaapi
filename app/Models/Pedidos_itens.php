@@ -8,11 +8,11 @@ class Pedidos_itens extends Geral
     protected $primaryKey = 'idpedido_item';
     protected $fillable = ['idpedido', 'idproduto', 'vlrunitario', 'quantidade', 'vlrtotal', 'desconto'];
     protected $guarded = ['idpedido_item'];
-    public $dependencias = ['produto'];
+    public $with = ['produto'];
 
     public function pedido()
     {
-        return $this->belongsTo(Pedidos::class, 'idpedido', 'idpedido');
+        return $this->hasOne(Pedidos::class, 'idpedido', 'idpedido');
     }
 
     public function produto()

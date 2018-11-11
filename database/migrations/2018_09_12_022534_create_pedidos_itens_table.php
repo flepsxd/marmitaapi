@@ -23,8 +23,8 @@ class CreatePedidositensTable extends Migration
             $table->decimal('desconto', 15, 2)->default(0)->nullable(true);
             $table->timestamps();
 
-            $table->foreign('idpedido')->references('idpedido')->on('pedidos');
-            $table->foreign('idproduto')->references('idproduto')->on('produtos');
+            $table->foreign('idpedido')->references('idpedido')->on('pedidos')->onDelete('cascade');
+            $table->foreign('idproduto')->references('idproduto')->on('produtos')->onDelete('set null');
         });
     }
 

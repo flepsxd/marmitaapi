@@ -24,30 +24,39 @@ class RelatoriosController extends Controller
         $tipo = json_decode(@$request->input('filter'))->tipo;
         $retorno = [];
         if ($tipo == 'produtos') {
-            $dados = Produtos::filtrar($request)->whereHas('pedidos_itens.pedido', function($query) use ($perini, $perfim) {
+            $dados = Produtos::filtrar($request)->whereHas('pedidos', function($query) use ($perini, $perfim) {
                 $query->whereBetween('datahora', array($perini, $perfim));
                 $query->has('lancamento');
-            });
+            })->with(['pedidos' => function($query) use ($perini, $perfim) {
+                $query->whereBetween('datahora', array($perini, $perfim));
+                $query->has('lancamento');
+            }]);
             
         } else {
             $dados = Pessoas::filtrar($request)->whereHas('pedidos', function($query) use ($perini, $perfim) {
                 $query->whereBetween('datahora', array($perini, $perfim));
                 $query->has('lancamento');
-            });
+            })->with(['pedidos' => function($query) use ($perini, $perfim) {
+                $query->whereBetween('datahora', array($perini, $perfim));
+                $query->has('lancamento');
+            }]);
         }
+        $dados->each(function($q) {
+            $q->append('items');
+        });
         foreach($dados->get() as $dado) {
-            $dado->append('items');
-            $dado->append('status_formatado');
             $dado->valor = 0;
             $dado->quantidade = 0;
+            $dado->qntdpedido = 0;
             $children = [];
             foreach($dado->items as $item) {
                 $dado->valor += $item['valor'];
                 $dado->quantidade += $item['quantidade'];
+                $dado->qntdpedido += $item['qntdpedido'];
                 $children[] = $item;
             }
             unset($dado->pedidos_itens);
-            unset($dado->pedido);
+            unset($dado->pedidos);
             unset($dado->items);
             $dado->children = $children;
             $retorno[] = $dado;

@@ -10,6 +10,8 @@
 | and give it the Closure to call when that URI is requested.
 |
  */
+DB::connection()->enableQueryLog();
+
 
 $router->get('/', function () use ($router) {
     return $router->app->version();

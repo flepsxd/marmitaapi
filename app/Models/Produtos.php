@@ -8,11 +8,15 @@ class Produtos extends Geral
     protected $primaryKey = 'idproduto';
     protected $fillable = ['descricao', 'preco', 'status'];
     protected $guarded = ['idproduto'];
-    protected $calculados = ['status_formatado'];
+    public $appends = ['status_formatado'];
 
     public function pedidos_itens()
     {
         return $this->hasMany(Pedidos_itens::class, 'idproduto', 'idproduto');
+    }
+
+    public function pedidos() {
+        return $this->hasManyThrough(Pedidos::class, Pedidos_itens::class, 'idproduto', 'idpedido', 'idproduto', 'idpedido');
     }
 
     public function agendamentos_itens()
@@ -30,20 +34,27 @@ class Produtos extends Geral
 
     public function getItemsAttribute() {
         $items = [];
-        foreach($this->pedidos_itens as $pedido_itens) {
-            $pedido_itens->with('pedido');
-            $item = @$items[$pedido_itens->pedido->idpessoa];
-            if(!$item) {
-                $item = [
-                    'pessoa' => $pedido_itens->pedido->pessoa_nome,
-                    'valor' => 0,
-                    'quantidade' => 0,
-                    'status_formatado' => $pedido_itens->pedido->pessoa->status_formatado
-                ];
+        $idproduto = $this->idproduto;
+        foreach($this->pedidos as $pedido) {
+            $pedidos_itens = $pedido->pedidos_itens->filter(function($pedido_item) use ($idproduto) {
+                return $pedido_item->idproduto == $idproduto;
+            });
+            $item = @$items[$pedido->idpessoa];
+            foreach($pedidos_itens as $pedido_itens) {
+                if(!$item) {
+                    $item = [
+                        'pessoa' => $pedido->pessoa_nome,
+                        'valor' => 0,
+                        'quantidade' => 0,
+                        'qntdpedido' => 0,
+                        'status_formatado' => $pedido->pessoa->status_formatado
+                    ];
+                }
+                $item['valor'] += floatval($pedido_itens->vlrtotal);
+                $item['quantidade'] += floatval($pedido_itens->quantidade);
+                $item['qntdpedido'] += 1;
             }
-            $item['valor'] = $item['valor'] + floatval($pedido_itens->vlrtotal);
-            $item['quantidade'] = $item['quantidade'] + floatval($pedido_itens->quantidade);
-            $items[$pedido_itens->pedido->idpessoa] = $item;
+            $items[$pedido->idpessoa] = $item;
         }
         return $items;
     }

@@ -56,12 +56,21 @@ class Geral extends Model
         return $query;
     }
 
-    public function scopeLoadGet($query, $get = false) {
+    public function scopeLoadGet($query, $get = false, $toArray = true) {
         $dependencias = @$this->dependencias;
         $appends = @$this->calculados;
         $query->with($dependencias);
-        $query->append = $appends;
-        return $get ? $query->get() : $query;
+        if($get) {
+            $query = $query->get();
+            if($appends) {
+                $query->each(function($q) use ($appends) {
+                    $q->setAppends($appends);
+                    return $q;
+                });
+            }
+            return $toArray ? $query->toArray() : $query;
+        }
+        return $query;
     }
 
     public static function preAdicionar($model) {
