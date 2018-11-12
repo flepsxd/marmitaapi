@@ -20,7 +20,8 @@ class BaseSeeder extends Seeder
             NeightbourhoodTableSeeder::class,
             AddressTableSeeder::class,
             PersonTableSeeder::class,
-            EtapaTableSeeder::class
+            EtapaTableSeeder::class,
+            FpgtoTableSeeder::class
         ]);
         Model::reguard();
     }

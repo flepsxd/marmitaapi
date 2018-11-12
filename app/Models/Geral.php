@@ -19,8 +19,14 @@ class Geral extends Model
                 $dotIndex = strpos($key, ".");
                 if($dotIndex != false) {
                     $newKey = explode(".", $key);
-                    $query = $query->whereHas($newKey[0], function($newQuery) use ($newKey, $dates, $value) {
-                        $newQuery = $this->whereFiltrar($newQuery, $newKey[1], $dates, $value);
+                    $ref = end($newKey);
+                    array_pop($newKey);
+                    if(in_array($oldQuery->getModel()->getTable(), $newKey)){
+                        $newKey = array_diff($newKey, [$oldQuery->getModel()->getTable()]);
+                    }
+                    $newKey = join(".",$newKey);
+                    $query = $query->whereHas($newKey, function($newQuery) use ($ref, $dates, $value) {
+                        $newQuery = $this->whereFiltrar($newQuery, $ref, $dates, $value);
                     });
                 } else {
                     $query = $this->whereFiltrar($query, $key, $dates, $value);
@@ -58,7 +64,9 @@ class Geral extends Model
 
     public function scopeLoadGet($query, $get = false, $toArray = true) {
         $dependencias = @$this->dependencias;
-        $appends = @$this->calculados;
+        $calculados = $this->calculados ?: [];
+        $appends = $this->appends ?: [];
+        $appends = array_merge($appends, $calculados);
         $query->with($dependencias);
         if($get) {
             $query = $query->get();

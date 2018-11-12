@@ -24,21 +24,25 @@ class RelatoriosController extends Controller
         $tipo = json_decode(@$request->input('filter'))->tipo;
         $retorno = [];
         if ($tipo == 'produtos') {
-            $dados = Produtos::filtrar($request)->whereHas('pedidos', function($query) use ($perini, $perfim) {
+            $dados = Produtos::filtrar($request)->whereHas('pedidos', function($query) use ($perini, $perfim, $request) {
                 $query->whereBetween('datahora', array($perini, $perfim));
                 $query->has('lancamento');
-            })->with(['pedidos' => function($query) use ($perini, $perfim) {
+                $query->filtrar($request);
+            })->with(['pedidos' => function($query) use ($perini, $perfim, $request) {
                 $query->whereBetween('datahora', array($perini, $perfim));
                 $query->has('lancamento');
+                $query->filtrar($request);
             }]);
             
         } else {
-            $dados = Pessoas::filtrar($request)->whereHas('pedidos', function($query) use ($perini, $perfim) {
+            $dados = Pessoas::filtrar($request)->whereHas('pedidos', function($query) use ($perini, $perfim, $request) {
                 $query->whereBetween('datahora', array($perini, $perfim));
                 $query->has('lancamento');
-            })->with(['pedidos' => function($query) use ($perini, $perfim) {
+                $query->filtrar($request);
+            })->with(['pedidos' => function($query) use ($perini, $perfim, $request) {
                 $query->whereBetween('datahora', array($perini, $perfim));
                 $query->has('lancamento');
+                $query->filtrar($request);
             }]);
         }
         $dados->each(function($q) {

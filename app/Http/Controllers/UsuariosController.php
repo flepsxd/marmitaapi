@@ -22,9 +22,9 @@ class UsuariosController extends Controller
 
     public function update(Request $request, $id){
         $this->validate($request, [
-            'nome' => 'required|unique',
-            'email' => 'required|email|unique:usuarios',
-            'senha' => 'required'
+            'nome' => 'required|unique:usuarios,nome,'.$id,
+            'email' => 'required|email|unique:usuarios,email,'.$id,
+            'senha' => 'required|min:6'
         ]);
         $model = Usuarios::find($id);
         $model->fill($request->all());
@@ -34,9 +34,9 @@ class UsuariosController extends Controller
 
     public function create(Request $request){
         $this->validate($request, [
-            'nome' => 'required',
-            'email' => 'required|email|unique:usuarios',
-            'senha' => 'required'
+            'nome' => 'required|unique:usuarios,nome',
+            'email' => 'required|email|unique:usuarios,email',
+            'senha' => 'required|min:6'
         ]);
         $model = new Usuarios;
         $model->fill($request->all());

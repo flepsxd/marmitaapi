@@ -14,12 +14,16 @@ use Carbon\Carbon;
  */
 
 $factory->define(App\Models\Agendamentos_itens::class, function (Faker\Generator $faker) {
+    $produto = App\Models\Produtos::inRandomOrder()->first();
+    $quantidade = $faker->numberBetween(1, 20);
+    $desconto = $faker->randomFloat(2, 0, $produto->preco);
+    $vlrtotal = ($produto->preco * $quantidade) - $desconto;
     return [
-        'vlrunitario' => $faker->randomFloat(2),
-        'quantidade' => $faker->randomDigit,
-        'vlrtotal' => $faker->randomFloat(2),
-        'desconto' => $faker->randomFloat(2),
-        'idproduto' => App\Models\Produtos::pluck('idproduto')->random()
+        'vlrunitario' => $produto->preco,
+        'quantidade' => $quantidade,
+        'vlrtotal' => $vlrtotal,
+        'desconto' => $desconto,
+        'idproduto' => $produto->idproduto
     ];
 });
 
@@ -28,6 +32,7 @@ $factory->define(App\Models\Agendamentos::class, function (Faker\Generator $fake
     return [
         'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
         'status' => $faker->randomElement(['A', 'I']),
+        'idformapagto' => App\Models\Formapagtos::pluck('idformapagto')->random(),
         'hora' => Carbon::now(-3),
         'previsao' => Carbon::now(-3)->addMinutes(30),
         'observacoes' => $faker->realText,
@@ -62,6 +67,7 @@ $factory->define(App\Models\Enderecos::class, function (Faker\Generator $faker) 
 $factory->define(App\Models\Lancamentos::class, function (Faker\Generator $faker) {
     return [
         'valor' => $faker->randomFloat(2),
+        'idformapagto' => App\Models\Formapagtos::pluck('idformapagto')->random(),
         'datahora' => $faker->dateTime,
         'valorpago' => $faker->randomFloat(2),
         'datapagto' => $faker->dateTime
@@ -69,21 +75,25 @@ $factory->define(App\Models\Lancamentos::class, function (Faker\Generator $faker
 });
 
 $factory->define(App\Models\Pedidos_itens::class, function (Faker\Generator $faker) {
+    $produto = App\Models\Produtos::inRandomOrder()->first();
+    $quantidade = $faker->numberBetween(1, 20);
+    $desconto = $faker->randomFloat(2, 0, $produto->preco);
+    $vlrtotal = ($produto->preco * $quantidade) - $desconto;
     return [
-        'vlrunitario' => $faker->randomFloat(2),
-        'quantidade' => $faker->randomDigit,
-        'vlrtotal' => $faker->randomFloat(2),
-        'desconto' => $faker->randomFloat(2),
-        'idproduto' => App\Models\Produtos::pluck('idproduto')->random()
+        'vlrunitario' => $produto->preco,
+        'quantidade' => $quantidade,
+        'vlrtotal' => $vlrtotal,
+        'desconto' => $desconto,
+        'idproduto' => $produto->idproduto
     ];
 });
 $factory->define(App\Models\Pedidos::class, function (Faker\Generator $faker) {
     return [
         'idpessoa' => App\Models\Pessoas::pluck('idpessoa')->random(),
         'datahora' => Carbon::now(-3),
+        'idformapagto' => App\Models\Formapagtos::pluck('idformapagto')->random(),
         'previsao' => Carbon::now(-3)->addMinutes(30),
         'observacoes' => $faker->realText,
-        'status' => $faker->randomElement(['T', 'A', 'C', 'S', 'E']),
         'idendereco' => App\Models\Enderecos::pluck('idendereco')->random()
     ];
 });
@@ -108,7 +118,7 @@ $factory->define(App\Models\Pessoas::class, function (Faker\Generator $faker) {
 $factory->define(App\Models\Produtos::class, function (Faker\Generator $faker) {
     return [
         'descricao' => $faker->unique()->colorName,
-        'preco' => $faker->randomFloat(2),
+        'preco' => $faker->randomFloat(2, 0.1, 90),
         'status' => $faker->randomElement(['A', 'I'])
     ];
 });

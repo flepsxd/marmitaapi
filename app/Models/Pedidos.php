@@ -8,11 +8,12 @@ class Pedidos extends Geral
 {
     protected $table = 'pedidos';
     protected $primaryKey = 'idpedido';
-    protected $fillable = ['idagendamento', 'idendereco', 'idpessoa', 'datahora', 'previsao', 'valor', 'observacoes', 'status'];
+    protected $fillable = ['idagendamento', 'idendereco', 'idpessoa', 'datahora', 'previsao', 'valor', 'observacoes', 'idformapagto'];
     protected $guarded = ['idpedido'];
     protected $dates = ['datahora', 'previsao'];
+    protected $appends = ['formapagtodesc'];
     public $calculados = ['etapa', 'ordem', 'status_formatado', 'pessoa_nome'];
-    public $dependencias = ['pessoa.endereco', 'pedidos_itens.produto', 'pedidos_ordem.etapa', 'lancamento'];
+    public $dependencias = ['pessoa.endereco', 'pedidos_itens.produto', 'pedidos_ordem.etapa', 'lancamento', 'formapagto'];
 
     public function pedidos_itens()
     {
@@ -34,13 +35,26 @@ class Pedidos extends Geral
         return $this->hasOne(Pedidos_ordem::class, 'idpedido', 'idpedido');
     }
 
-    public function lancamento() {
+    public function lancamento() 
+    {
         return $this->hasOne(Lancamentos::class, 'idpedido', 'idpedido');
     }
 
-    public function agendamento() {
+    public function agendamento() 
+    {
         return $this->belongsTo(Agendamentos::class, 'idagendamento', 'idagendamento');
     }
+
+    public function formapagto() 
+    {
+        return $this->hasOne(Formapagtos::class, 'idformapagto', 'idformapagto');
+    }
+
+    public function getFormapagtodescAttribute()
+    {
+        return $this->formapagto->descricao;
+    }
+
 
     public function getStatusFormatadoAttribute()
     {

@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Produtos;
-use App\Models\Pedidos_itens;
-use App\Models\Agendamentos_itens;
+use App\Models\Formapagtos;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class ProdutosController extends Controller
+class FormapagtosController extends Controller
 {
     public function __construct()
     {
@@ -17,17 +14,17 @@ class ProdutosController extends Controller
 
     public function index(Request $request)
     {
-        return resposta(Produtos::filtrar($request)->loadGet(true));
+        return resposta(Formapagtos::filtrar($request)->loadGet(true));
     }
 
     public function show(Request $request, $id)
     {
-        return resposta(Produtos::loadGet()->find($id));
+        return resposta(Formapagtos::loadGet()->find($id));
     }
 
     public function update(Request $request, $id)
     {
-        $model = Produtos::find($id);
+        $model = Formapagtos::find($id);
         $model->fill($request->all());
         $model->save();
         return resposta($model);
@@ -35,7 +32,7 @@ class ProdutosController extends Controller
 
     public function create(Request $request)
     {
-        $model = new Produtos;
+        $model = new Formapagtos;
         $model->fill($request->all());
         $model->save();
         return resposta($model);
@@ -43,16 +40,7 @@ class ProdutosController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $produto = Pedidos_itens::where('idproduto', $id)->first();
-        if(!$produto) {
-            $produto = Agendamentos_itens::where('idproduto', $id)->first();
-        }
-        if ($produto) {
-            return resposta(null, ['idproduto' => 'Produto vinculado a um pedido ou agendamento'], 422);
-        }
-            
-
-        $model = Produtos::find($id);       
+        $model = Formapagtos::find($id);
         if ($model) {
             return resposta($model->delete());
         }

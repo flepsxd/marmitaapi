@@ -23,7 +23,7 @@ class Produtos extends Geral
     {
         return $this->hasMany(Agendamentos_itens::class, 'idproduto', 'idproduto');
     }
-
+    
     public function getPrecoAttribute() {
         return (float) $this->attributes['preco'];
     }

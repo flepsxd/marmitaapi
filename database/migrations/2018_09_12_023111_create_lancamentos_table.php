@@ -17,6 +17,7 @@ class CreateLancamentosTable extends Migration
             $table->increments('idlancamento');
             $table->unsignedInteger('idpessoa')->nullable(true);
             $table->unsignedInteger('idpedido')->nullable(true);
+            $table->unsignedInteger('idformapagto')->nullable(true);
             $table->decimal('valor', 15, 2);
             $table->dateTime('datahora')->useCurrent();
             $table->decimal('valorpago', 15, 2);
@@ -25,6 +26,7 @@ class CreateLancamentosTable extends Migration
 
             $table->foreign('idpessoa')->references('idpessoa')->on('pessoas');
             $table->foreign('idpedido')->references('idpedido')->on('pedidos');
+            $table->foreign('idformapagto')->references('idformapagto')->on('formapagtos')->onDelete('set null');
         });
     }
 

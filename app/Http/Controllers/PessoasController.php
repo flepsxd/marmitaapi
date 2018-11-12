@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Pessoas;
 use App\Models\Enderecos;
+use App\Models\Pedidos;
+use App\Models\Agendamentos;
 use Illuminate\Http\Request;
 
 class PessoasController extends Controller
@@ -51,16 +53,12 @@ class PessoasController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $pessoa = Pessoas::doesntHave('pedidos', 'and', function($query) use ($id) {
-            $query->where('idpessoa', $id);
-        });
+        $pessoa = Pedidos::where('idpessoa', $id)->first();
         if(!$pessoa) {
-        $pessoa = Pessoas::doesntHave('agendamentos', 'and', function($query) use ($id) {
-            $query->where('idpessoa', $id);
-        });
+            $pessoa = Agendamentos::where('idpessoa', $id)->get()->first();
         }
         if ($pessoa) {
-        return resposta(null, ['idpessoa' => 'Pessoa vinculada a um pedido ou agendamento'], 422);
+            return resposta(null, ['idpessoa' => 'Pessoa vinculada a um pedido ou agendamento'], 422);
         }
         $model = Pessoas::find($id);
         if ($model) {

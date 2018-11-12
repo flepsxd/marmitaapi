@@ -8,10 +8,11 @@ class Agendamentos extends Geral
 {
     protected $table = 'agendamentos';
     protected $primaryKey = 'idagendamento';
-    protected $fillable = [ 'idpessoa', 'status', 'idpessoa', 'hora', 'previsao', 'valor', 'observacoes', 'status' ];
+    protected $fillable = [ 'idpessoa', 'status', 'idpessoa', 'hora', 'previsao', 'valor', 'observacoes', 'status', 'idformapagto'];
     protected $guarded = ['idagendamento'];
+    protected $appends = ['formapagtodesc'];
     protected $calculados = ['pessoa_nome'];
-    public $dependencias = ['agendamento_itens', 'pessoa'];
+    public $dependencias = ['agendamento_itens', 'pessoa', 'formapagto'];
 
     public function agendamento_itens()
     {
@@ -26,6 +27,16 @@ class Agendamentos extends Geral
     public function pedido() 
     {
         return $this->hasMany(Pedidos::class, 'idagendamento', 'idagendamento');
+    }
+
+    public function formapagto() 
+    {
+        return $this->hasOne(Formapagtos::class, 'idformapagto', 'idformapagto');
+    }
+
+    public function getFormapagtodescAttribute()
+    {
+        return $this->formapagto->descricao;
     }
 
     public function getPessoaNomeAttribute()
@@ -69,16 +80,20 @@ class Agendamentos extends Geral
                 'idpessoa' => $agendamento->idpessoa,
                 'idendereco' => $agendamento->pessoa->idendereco,
                 'valor' => $valor,
+                'idformapagto' => $agendamento->idformapagto,
                 'status' => 'A'
             ]);
             $itens = $itens->map(function($item) {
                 unset($item->idagendamento);
                 return $item;
             });
-            $agendamento->fill(['proximodia'=> true]);
-            $agendamento->save();
             $pedido->pedidos_itens()->createMany($itens->toArray());
             $pedido->save();
+        }
+        $agendamentos = Agendamentos::where('proximodia', false);
+        foreach($agendamentos as $agendamento) {
+            $agendamento->fill(['proximodia'=> true]);
+            $agendamento->save();
         }
         
     }

@@ -117,6 +117,13 @@ $router->group(['prefix' => 'etapas'], function () use ($router) {
     $router->delete('/{id}', 'EtapasController@delete');
 });
 
+$router->group(['prefix' => 'formapagtos'], function () use ($router) {
+    $router->get('/', 'FormapagtosController@index');
+    $router->get('/{id}', 'FormapagtosController@show');
+    $router->post('/', 'FormapagtosController@create');
+    $router->put('/{id}', 'FormapagtosController@update');
+    $router->delete('/{id}', 'FormapagtosController@delete');
+});
 
 $router->group(['prefix' => 'relatorios'], function() use ($router) {
     $router->get('/', 'RelatoriosController@index');

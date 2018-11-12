@@ -100,7 +100,7 @@ class PedidosController extends Controller
                 $pedidos = $pedidos->sortBy(function ($val) {
                     return $val->ordem;
                 });
-                $pedidos = $pedidos->values();
+                $pedidos = $pedidos->toArray();
             } else {
                 $pedidos = [];
             }

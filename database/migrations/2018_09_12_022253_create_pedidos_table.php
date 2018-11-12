@@ -18,16 +18,17 @@ class CreatePedidosTable extends Migration
             $table->unsignedInteger('idagendamento')->nullable(true);
             $table->unsignedInteger('idpessoa')->nullable(true);
             $table->unsignedInteger('idendereco')->nullable(false);
+            $table->unsignedInteger('idformapagto')->nullable(true);
             $table->dateTime('datahora')->useCurrent();
             $table->dateTime('previsao');
             $table->decimal('valor', 12, 2);
             $table->string('observacoes', 300);
-            $table->char('status', 1)->default('N');
             $table->timestamps();
 
             $table->foreign('idpessoa')->references('idpessoa')->on('pessoas')->onDelete('set null');
             $table->foreign('idagendamento')->references('idagendamento')->on('agendamentos');
             $table->foreign('idendereco')->references('idendereco')->on('enderecos');
+            $table->foreign('idformapagto')->references('idformapagto')->on('formapagtos')->onDelete('set null');
         });
     }
 
